@@ -1,0 +1,44 @@
+nav{
+    display: inline;
+}
+/*Handles navigation bar*/
+a{
+    display: inline;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+    text-decoration: none;
+    font-weight: bolder;
+}
+li{
+    display: inline;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+ul{
+    text-align: center;
+
+}
+h1{
+    size: 20px;
+    font: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.bold{
+    font: bold;
+    font-weight: bold;
+}
+h3{
+    font: bold;
+    size: 10px;
+}
+.img{
+    width: 400px;
+    height: 500px;
+}
+.img1{
+    width: 650px;
+    height: 500px;
+}
+
+
