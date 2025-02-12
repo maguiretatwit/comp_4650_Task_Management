@@ -4,56 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment: Improve Semantics</title>
+    <title>Group Project Introduction</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
-    <nav>
-        <ul>
-            <li><a href="#OV">Overview</a></li>
-            <li><a href="#TI">Team Introduction</a></li>
-        </ul>
-    </nav>
-
-    <header>
-        <h1 id="OV">Project Overview</h1>
-        <p> Create a Task Management app which will allow users to keep track of different tasks which they specify.
-            The app should allow them to create new tasks, specify due dates, and mark tasks as done. 
-            Users should be notified when a task is due. </p>
-
-    </header>
-    <div>
-        <h1 id="TI">
-            Team Introduction
-        </h1>
-        <nav>
-            <ul>
-                <li><a href="#T">Tyger Maguire</a></li>
-                <li><a href="#E">Eric Livezey</a></li>
-                <li><a href="#H">Hamza Yousuf</a></li>
+    <!-- Header -->
+    <header class="header">
+        <nav class="header__item">
+            <ul class="navigation-bar">
+                <li class="navigation-bar__item">
+                    <a href="#overview">Overview</a>
+                <li class="navigation-bar__item">
+                    <a href="#introduction">Introduction</a>
+                </li>
             </ul>
         </nav>
-        <article>
-            <h3 id="T">Tyger Maguire</h3>
-            <p>Role: </p>
-            <img class="img" src = "Tyger.jpg" alt="Tyger">
-        </article>
-        <article>
-            <h3 id="E">Eric Livezey</h3>
-            <p>Role: </p>
-        </article>
-        <article>
-            <h3 id="H">Hamza Yousuf</h3>
-            <p>Role: </p>
-        </article>
+    </header>
+    <!-- Content -->
+    <div class="content">
+        <section>
+            <h1 id="overview">Project Overview</h1>
+            <p>Create a Task Management app which will allow users to keep track of different tasks which they specify.
+                The
+                app
+                should allow them to create new tasks, specify due dates, and mark tasks as done. Users should be
+                notified
+                when
+                a task is due.</p>
+        </section>
+        <section>
+            <h1 id="introduction">Team Introduction</h1>
+            <div class="members">
+                <article class="member">
+                    <h3>Tyger Maguire</h3>
+                    <p>Role:</p>
+                    <img src="tyger.jpg" alt="Tyger" width="100" height="120">
+                </article>
+                <article class="member">
+                    <h3>Eric Livezey</h3>
+                    <p>Role:</p>
+                    <img src="eric.jpg" alt="Eric" width="100" height="120">
+                </article>
+                <article class="member">
+                    <h3>Hamza Yousuf</h3>
+                    <p>Role:</p>
+                    <img src="hamza.jpg" alt="Yousuf" width="100" height="120">
+                </article>
+            </div>
+        </section>
     </div>
-
-    <footer>
+    <!-- Footer -->
+    <footer class="footer">
         <p>T.H.E. &copy; 2025</p>
     </footer>
-
 </body>
 
 </html>
