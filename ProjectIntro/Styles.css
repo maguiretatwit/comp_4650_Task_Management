@@ -70,7 +70,6 @@ a {
 
 .members {
     display: flex;
-    width: 100%;
 }
 
 .member:not(:first-child) {
