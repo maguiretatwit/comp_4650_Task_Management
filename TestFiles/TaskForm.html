@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Form</title>
+    <style>
+        body {
+            padding: 0px 30vw;
+            justify-content: center;
+            vertical-align: center;
+            align-items: center;
+        }
+
+        form {
+            width: 30%;
+            padding: 10px;
+            height: auto;
+            background-color: rgb(127, 40, 40);
+        }
+
+        input {
+            
+            background-color: rgb(255, 255, 255);
+            height: 30px;
+            margin: 10px 0px;
+        }
+
+        div{
+            display: inline-block;
+        }
+        .num{
+            width: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post" enctype="multipart/form-data">
+        <br />
+        <label>Task Description</label>
+        </br>
+        <textarea name="post" rows="5"></textarea>
+        <br>
+        <label>Due Date</label>
+        <br>
+        <input type="date">
+        <br>
+        <label>priority (1-10)</label>
+        <br>
+        <input type="number" class="num" min="1" max="10">
+        <br>
+        <label> Time to Complete </label>
+        <br>
+        <div>
+            <input type="number" class="num" min="0" placeholder="Hours">
+            :
+            <input type="number" class="num" min="0" max="59" placeholder="Minutes">
+        </div>
+        <br>
+        <input type="submit">
+
+    </form>
+</body>
+
+</html>
