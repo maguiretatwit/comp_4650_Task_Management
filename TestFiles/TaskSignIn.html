@@ -5,64 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In Page</title>
-    <style>
-        body {
-            padding: 0px 30vw;
-            justify-content: center;
-            vertical-align: center;
-            align-items: center;
-        }
-
-        form {
-            width: 30%;
-            padding: 10px;
-            padding-top: 0;
-            height: auto;
-            background-color: rgb(127, 40, 40);
-        }
-
-        input {
-            
-            background-color: rgb(255, 255, 255);
-            height: 30px;
-            margin: 10px 0px;
-        }
-
-        div{
-            display: inline-block;
-        }
-        h1{
-            size: 100px;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        button{
-            border: 1;
-            background: white;
-            box-shadow: black;
-            border-radius: 1px;
-            height: 30px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <form method="post" enctype="multipart/form-data">
-        <br />
-        <h1>Sign In</h1>
-        <br>
-        <label>User Name</label>
-        <br>
-        <input type="text">
-        <br>
-        <label>Password</label>
-        <br>
-        <input type="password">
-        <br>
-        <input type="submit">
-        <button type="button">Make Account</button>
-
-    </form>
+    <div class="page-content">
+        <form class="form" method="post" enctype="multipart/form-data">
+            <h1>Sign In</h1>
+            <div class="form-element">
+                <label class="form-element__label">User Name</label>
+                <input class="input" type="text">
+            </div>
+            <div class="form-element">
+                <label class="form-element__label">Password</label>
+                <input class="input" type="password">
+            </div>
+            <a style="font-size: .75rem" href="AccountCreation.html">Create a new account.</a>
+            <button class="button float_right" type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 
 </html>
