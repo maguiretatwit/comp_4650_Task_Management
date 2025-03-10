@@ -43,6 +43,7 @@ body {
     border: 1px solid #000;
     border-radius: .25rem;
     width: 100%;
+    background-color: #fff;
 }
 
 .input {
@@ -52,6 +53,7 @@ body {
     padding-inline: .25rem;
     padding-block: 0;
     line-height: 2.5rem;
+    background-color: #fff;
 }
 
 .button {
