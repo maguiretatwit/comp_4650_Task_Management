@@ -61,14 +61,35 @@ body {
     padding-inline: 1rem;
     padding-block: .5rem;
     line-height: 1.5rem;
+    font-size: .85rem;
 }
 
 .button:hover {
     background-color: #eee;
+    cursor: pointer;
 }
 
 .button:active {
     background-color: #dfdfdf;
+}
+
+.button_inverse {
+    background-color: #000;
+    color: #fff;
+}
+
+.button_inverse:hover {
+    background-color: #111;
+}
+
+.button_no-border {
+    border: none;
+}
+
+.button_link {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
 }
 
 .size_1-of-2 {
@@ -77,4 +98,10 @@ body {
 
 .float_right {
     float: right;
+}
+
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
 }
