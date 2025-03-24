@@ -63,7 +63,7 @@ function orientationchange(x) {
     }
     var footers = document.querySelectorAll('.foot');
     for (var i = 0; i < footers.length; i++) {
-      footers[i].style.display = 'flex';
+      footers[i].style.display = 'block';
     }
 
 
@@ -78,6 +78,10 @@ function orientationchange(x) {
     var tabs = document.querySelectorAll('.tab');
     for (var i = 0; i < tabs.length; i++) {
       tabs[i].style.display = 'flex';
+    }
+    var ths = document.querySelectorAll('.th');
+    for (var i = 0; i < ths.length; i++) {
+      ths[i].style.display = 'flex';
     }
 
 

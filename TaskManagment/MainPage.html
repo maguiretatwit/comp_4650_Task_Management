@@ -12,8 +12,8 @@
     <div class="page-content">
 
         <div class="tab">
-            <button class="tab_button" onclick="listTab()">List</button>
-            <button class="tab_button" onclick="calenderTab()">Calender</button>
+            <button class="tab_button bu" onclick="listTab()"><h1 class="th">List</h1></button>
+            <button class="tab_button" onclick="calenderTab()"><h1 class="th">Calender</h1></button>
         </div>
         <div class="row-container">
             <div class="tab_content" id="list">
@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-element">
                                 <label class="form-element__label">Time to Complete</label>
-                                <input class="input size_1-of-2" type="number">
+                                <input class="input size_1-of-2" type="number" min="0">
                                 <input class="input size_1-of-2" type="number" min="0" max="59">
                             </div>
                             <button class="button button_inverse float_right" type="submit"
@@ -50,9 +50,9 @@
                     </div>
                 </div>
                 <div class="storage-box foot">
-                    <button class="button button_inverse fb"></button>
-                    <button class="button button_inverse fb"></button>
-                    <button class="button button_inverse fb"></button>
+                    <button class="button button_inverse fb">Due-Date</button>
+                    <button class="button button_inverse fb">Priority</button>
+                    <button class="button button_inverse fb">Recomended</button>
                 </div>
             </div>
             <div class="tab_content">
