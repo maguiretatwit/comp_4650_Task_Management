@@ -12,13 +12,13 @@ function closeTask() {
 
 function calenderTab(evt, tab) {
   document.getElementById("list").style.display = "none";
-  document.getElementById("calender").style.display = "flex";
+  document.getElementById("calender").style.display = "block";
 
 }
 
 function listTab(evt, tab) {
   document.getElementById("calender").style.display = "none";
-  document.getElementById("list").style.display = "flex";
+  document.getElementById("list").style.display = "block";
 }
 
 function orientationchange(x) {
@@ -38,6 +38,16 @@ function orientationchange(x) {
     for (var i = 0; i < tabs.length; i++) {
       tabs[i].style.display = 'none';
     }
+    var lists = document.querySelectorAll('.list');
+    for (var i = 0; i < lists.length; i++) {
+      lists[i].style.display = 'block';
+    }
+    var tbs = document.querySelectorAll('.tab_content');
+    for (var i = 0; i < tbs.length; i++) {
+      tbs[i].style.display = 'block';
+    }
+    
+
 
   } else {
 
