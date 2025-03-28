@@ -23,8 +23,13 @@ app.use(bodyParser.json());
 app.use(express.static('frontend/public'));
 
 /* endpoints */
-app.get('/', (_, res) => {
-    res.sendFile('home.html', { root });
+app.get('/', (req, res) => {
+    const session = security.sessions.from(req);
+    if (session) {
+        res.sendFile('home.html', { root });
+    } else {
+        res.location('login').status(301).send();
+    }
 });
 app.get('/login', (_, res) => {
     res.sendFile('login.html', { root });
