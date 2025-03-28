@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="page-content">
+        <div id="form" class="form">
+            <h2 class="form__title">Sign In</h2>
+            <div class="form-element">
+                <label class="form-element__label" for="username">Username</label>
+                <div class="form-element__control">
+                    <input id="username" class="input" placeholder="Username" autocomplete="username">
+                </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="password">Password</label>
+                <div class="form-element__control">
+                    <input id="password" class="input" type="password" placeholder="Password" autocomplete="current-password">
+                </div>
+            </div>
+            <div class="form-element form-element_controls">
+                <div class="form-element__control">
+                    <a class="button" href="/register">Register</a>
+                    <button class="button button_inverse float_right" onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('form');
+        /** @type {HTMLInputElement} */
+        const usernameInput = document.getElementById('username');
+        /** @type {HTMLInputElement} */
+        const passwordInput = document.getElementById('password');
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('form__error');
+        function showError(msg) {
+            errorElement.innerHTML = `<span>${msg}</span>`;
+            form.lastChild.after(errorElement);
+        }
+        async function login() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            if (username && password) {
+                const payload = { username, password };
+                const body = JSON.stringify(payload);
+                const headers = { 'content-type': 'application/json' };
+                const res = await fetch('/api/login', { method: 'POST', headers, body });
+                if (res.ok) {
+                    location.replace('/');
+                } else if (res.code === 400) {
+                    showError('Invalid username and/or password.');
+                } else {
+                    showError('Something went wrong.');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

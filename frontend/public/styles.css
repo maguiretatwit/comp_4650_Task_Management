@@ -1,0 +1,238 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(#eee, #fff, #eee);
+}
+
+.form {
+    border: 1px solid #000;
+    border-radius: .5rem;
+    padding: 2rem;
+    width: 20rem;
+}
+
+.form__title {
+    margin-top: 0;
+}
+
+.form-element {
+    position: relative;
+    min-width: 0;
+    display: block;
+    margin-bottom: .5rem;
+    padding: 0 .25rem;
+    width: 100%;
+}
+
+.form-element_controls {
+    margin-top: 1rem;
+}
+
+.form-element__label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    display: inline-block;
+    color: #444;
+    font-size: .75rem;
+    padding-right: .5rem;
+    padding-top: .25rem;
+    margin-bottom: .125rem;
+    border-bottom: 0;
+    padding-left: 0;
+}
+
+.form-element__legend {
+    font-weight: 700;
+    float: left;
+}
+
+.form-element__control {
+    clear: left;
+    position: relative;
+    border-bottom: 0;
+    padding-left: 0;
+    width: 100%;
+}
+
+.form-element__row {
+    display: flex;
+    margin-bottom: .25rem;
+    margin-inline: -.25rem;
+}
+
+.form__error {
+    color: #ea001e;
+    font-size: 0.875rem;
+}
+
+.input {
+    padding: 0 1rem 0 .75rem;
+    width: 100%;
+    min-height: calc(1.875rem + 2px);
+    font-family: inherit;
+    line-height: 1.875rem;
+    border: 1px solid #c9c9c9;
+    border-radius: .25rem;
+    background-color: #fff;
+    transition: border .1s linear, background-color .1s linear;
+    display: inline-block;
+}
+
+.textarea {
+    padding: .5rem .75rem;
+    min-height: calc(1.875rem + 2px);
+    resize: vertical;
+    border: 1px solid #c9c9c9;
+    border-radius: .25rem;
+    font-family: inherit;
+    width: 100%;
+    background-color: #fff;
+}
+
+.button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-block: 0;
+    padding-inline: 1rem;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: .25rem;
+    font-size: .875rem;
+    line-height: 1.875rem;
+    text-align: center;
+    text-decoration: none;
+    color: #0176d3;
+    white-space: normal;
+    user-select: none;
+    cursor: pointer;
+    transition: border .15s linear;
+}
+
+.button:hover {
+    background-color: #f3f3f3;
+    color: #014486;
+}
+
+.button+.button {
+    margin-left: .25rem;
+}
+
+.button_inverse {
+    justify-content: center;
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+.button_inverse:hover {
+    background-color: #2e2e2e;
+    border-color: #2e2e2e;
+    color: #fff;
+}
+
+
+.size_1-of-2 {
+    width: 50%;
+}
+
+.float_right {
+    float: right;
+}
+
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.storage-box {
+    border: 1px solid #000;
+    justify-content: center;
+    width: 100vw;
+}
+
+.foot {
+    display: flex;
+    gap: 10;
+    height: 10vh;
+    padding: 0rem;
+}
+
+.fb {
+
+    margin-top: 10px;
+    height: auto;
+}
+
+.calender {
+    height: 90vh;
+}
+
+.list {
+    height: 80vh;
+}
+
+.tform {
+    width: 100%;
+    display: none;
+}
+
+.tab {
+    display: flex;
+    flex: row;
+
+}
+
+.tab_button {
+    background-color: inherit;
+    float: left;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #000;
+    width: 50vw;
+    height: 10vh;
+}
+
+.tab_button:hover {
+    background-color: #777575;
+    cursor: pointer;
+}
+
+.th {
+    border: 0;
+}
+
+#close_task {
+    display: none;
+}

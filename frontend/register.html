@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="page-content">
+        <div id="form" class="form">
+            <h2 class="form__title">Register</h2>
+            <div class="form-element">
+                <label class="form-element__label" for="username">Username</label>
+                <div class="form-element__control">
+                    <input id="username" class="input" placeholder="Username" autocomplete="username">
+                </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="email">Email</label>
+                <div class="form-element__control">
+                    <input id="email" class="input" type="email" placeholder="Email" autocomplete="email">
+                </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="password">Password</label>
+                <div class="form-element__control">
+                    <input id="password" class="input" type="password" placeholder="Password" autocomplete="new-password">
+                </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="password-confirm">Confirm Password</label>
+                <div class="form-element__control">
+                    <input id="password-confirm" class="input" type="password" placeholder="Password"
+                        autocomplete="new-password">
+                </div>
+            </div>
+            <div class="form-element form-element_controls">
+                <div class="form-element__control">
+                    <a class="button" href="/login">Sign In</a>
+                    <button class="button button_inverse float_right" onclick="register()">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('form');
+        /** @type {HTMLInputElement} */
+        const usernameInput = document.getElementById('username');
+        /** @type {HTMLInputElement} */
+        const emailInput = document.getElementById('email');
+        /** @type {HTMLInputElement} */
+        const passwordInput = document.getElementById('password');
+        /** @type {HTMLInputElement} */
+        const passwordConfirmInput = document.getElementById('password-confirm');
+        const errorElement = document.createElement('div');
+        errorElement.classList.add('form__error');
+        function showError(msg) {
+            errorElement.innerHTML = `<span>${msg.replace('\n', '<br>')}</span>`;
+            form.lastChild.after(errorElement);
+        }
+        async function register() {
+            const username = usernameInput.value;
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            const passwordConfim = passwordConfirmInput.value;
+            if (username && email && password && passwordConfim) {
+                if (password === passwordConfim) {
+                    const payload = { username, email, password };
+                    const body = JSON.stringify(payload);
+                    const headers = { 'content-type': 'application/json' };
+                    const res = await fetch('/api/users', { method: 'POST', headers, body });
+                    if (res.ok) {
+                        location.replace('/login');
+                    } else if (res.status === 400) {
+                        const error = await res.json();
+                        if (error.type === 'CONFLICT') {
+                            const { fields } = error;
+                            let msgs = [];
+                            for (const field of fields) {
+                                msgs.push(`A user with that ${field} already exists.`);
+                            }
+                            showError(msgs.join('\n'));
+                        } else {
+                            showError('Something went wrong.');
+                        }
+                    } else {
+                        showError('Something went wrong.');
+                    }
+                } else {
+                    showError('Passwords must match.');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
