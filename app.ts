@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     if (session) {
         res.sendFile('home.html', { root });
     } else {
-        res.location('login').status(301).send();
+        res.location('login').status(302).send();
     }
 });
 app.get('/login', (_, res) => {
