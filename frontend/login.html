@@ -54,7 +54,7 @@
                 const res = await fetch('/api/login', { method: 'POST', headers, body });
                 if (res.ok) {
                     location.replace('/');
-                } else if (res.code === 400) {
+                } else if (res.status === 401) {
                     showError('Invalid username and/or password.');
                 } else {
                     showError('Something went wrong.');
