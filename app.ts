@@ -18,7 +18,7 @@ const app = express();
 /* configure express */
 app.disable('x-powered-by');
 app.use(cookieParser());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('frontend/public'));
 
