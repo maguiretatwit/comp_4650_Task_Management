@@ -49,7 +49,7 @@ const sessions: Sessions = {
 async function authorize(user: User, res: Response, next: NextFunction) {
   // check for existing session
   let token = sessions.tokenOf(user);
-  if (!sessions.tokenOf(user)) {
+  if (!token) {
     // create new session
     token = generateKey();
     sessions.put(token, { user: user });
