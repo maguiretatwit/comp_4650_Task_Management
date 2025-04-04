@@ -10,6 +10,7 @@
 
 <body>
     <div class="page-content">
+        <button class="button button_inverse fixed" onclick="logout()">Logout</button>
 
         <div class="tab">
             <button class="tab_button bu" onclick="listTab()">
@@ -27,6 +28,13 @@
                         onclick="openTask()">+</button>
                     <button class="button button_inverse float_right" id="close_task" name="New Task"
                         onclick="closeTask()">+</button>
+                    <div class="taskDisplay" id="taskDisplayList">
+
+                    </div>
+                    <!-- List -->
+                    <ul class="task_list">
+
+                    </ul>
                     <!-- New Task Form -->
                     <div id="task-form" class="form tform">
                         <!-- Name -->
@@ -90,19 +98,44 @@
                     </div>
                 </div>
                 <div class="storage-box foot">
-                    <button class="button button_inverse fb">Due-Date</button>
-                    <button class="button button_inverse fb">Priority</button>
+                    <button class="button button_inverse fb" onclick="due_date_sort()">Due-Date</button>
+                    <button class="button button_inverse fb" onclick="prioritySort()">Priority</button>
                     <button class="button button_inverse fb">Recomended</button>
                 </div>
             </div>
             <div class="tab_content">
                 <h1>Calender</h1>
                 <div class="storage-box calender" id="calender">
+                    <div class="calendarm">
+                        <div class="calendar-header">
+                            <button id="prev-month">‹</button>
+                            <div id="month-year"></div>
+                            <button id="next-month">›</button>
+                        </div>
+                        <div class="calendar-body">
+                            <div class="calendar-weekdays">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div class="calendar-dates">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="taskDisplay" id="taskDisplayCal">
+                        
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="index.js"></script>
+    <script src="index.js">
+        
+    </script>
     <div style="display:none">
         <!-- Logout Button Example -->
         <button class="button button_inverse" onclick="logout()">Logout</button>
@@ -111,8 +144,11 @@
                 await fetch('/api/logout', { method: 'POST' });
                 location.replace('/login');
             }
+
+
         </script>
     </div>
+
 </body>
 
 </html>
