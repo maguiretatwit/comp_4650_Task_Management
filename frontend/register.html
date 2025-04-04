@@ -6,53 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        :root {
-            --c-header-height: 0rem;
-        }
-    </style>
 </head>
 
 <body>
-    <section class="layout-content">
-        <div class="page-content">
-            <div id="form" class="form">
-                <h2 class="form__title">Register</h2>
-                <div class="form-element">
-                    <label class="form-element__label" for="username">Username</label>
-                    <div class="form-element__control">
-                        <input id="username" class="input" placeholder="Username" autocomplete="username">
-                    </div>
+    <div class="layout-content page-content align-items_center justify-content_center">
+        <div id="form" class="form">
+            <h2 class="form__title">Register</h2>
+            <div class="form-element">
+                <label class="form-element__label" for="username">Username</label>
+                <div class="form-element__control">
+                    <input id="username" class="input" placeholder="Username" autocomplete="username">
                 </div>
-                <div class="form-element">
-                    <label class="form-element__label" for="email">Email</label>
-                    <div class="form-element__control">
-                        <input id="email" class="input" type="email" placeholder="Email" autocomplete="email">
-                    </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="email">Email</label>
+                <div class="form-element__control">
+                    <input id="email" class="input" type="email" placeholder="Email" autocomplete="email">
                 </div>
-                <div class="form-element">
-                    <label class="form-element__label" for="password">Password</label>
-                    <div class="form-element__control">
-                        <input id="password" class="input" type="password" placeholder="Password"
-                            autocomplete="new-password">
-                    </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="password">Password</label>
+                <div class="form-element__control">
+                    <input id="password" class="input" type="password" placeholder="Password"
+                        autocomplete="new-password">
                 </div>
-                <div class="form-element">
-                    <label class="form-element__label" for="password-confirm">Confirm Password</label>
-                    <div class="form-element__control">
-                        <input id="password-confirm" class="input" type="password" placeholder="Password"
-                            autocomplete="new-password">
-                    </div>
+            </div>
+            <div class="form-element">
+                <label class="form-element__label" for="password-confirm">Confirm Password</label>
+                <div class="form-element__control">
+                    <input id="password-confirm" class="input" type="password" placeholder="Password"
+                        autocomplete="new-password">
                 </div>
-                <div class="form-element form-element_controls">
-                    <div class="form-element__control">
-                        <a class="button" href="/login">Sign In</a>
-                        <button class="button button_inverse float_right" onclick="register()">Register</button>
-                    </div>
+            </div>
+            <div class="form-element form-element_controls">
+                <div class="form-element__control">
+                    <a class="button" href="/login">Sign In</a>
+                    <button class="button button_inverse float_right" onclick="register()">Register</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
     <script>
         const form = document.getElementById('form');
         /** @type {HTMLInputElement} */

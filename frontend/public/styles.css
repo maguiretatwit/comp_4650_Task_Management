@@ -4,10 +4,6 @@
     box-sizing: border-box;
 }
 
-:root {
-    --c-header-height: 5rem;
-}
-
 html {
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -34,7 +30,7 @@ fieldset {
     display: flex;
     justify-content: end;
     align-items: center;
-    height: var(--c-header-height);
+    height: 5rem;
     padding: 1rem 0;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .07);
@@ -80,16 +76,15 @@ fieldset {
 
 .layout-content {
     position: absolute;
-    top: var(--c-header-height);
+    top: 5rem;
     min-width: 100%;
-    height: calc(100% - var(--c-header-height));
+    height: calc(100% - 5rem);
 }
 
 .page-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    top: 0;
     width: 100%;
     min-height: 100%;
     background: linear-gradient(#eee, #fff, #eee);
@@ -223,6 +218,13 @@ fieldset {
     color: #fff;
 }
 
+.justify-content_center {
+    justify-content: center;
+}
+
+.align-items_center {
+    align-items: center;
+}
 
 .size_1-of-2 {
     width: 50%;
