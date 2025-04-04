@@ -7,7 +7,7 @@ interface CreateTaskOptions {
     name: string;
     description?: string;
     priority?: number;
-    dueAt: string;
+    dueAt?: string;
 }
 
 async function getTasks(req: Request, res: security.ResponseWithSession<InferAttributes<Task>[]>, next: NextFunction) {
