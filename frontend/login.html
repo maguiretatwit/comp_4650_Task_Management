@@ -6,32 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --c-header-height: 0rem;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="page-content">
-        <div id="form" class="form">
-            <h2 class="form__title">Sign In</h2>
-            <div class="form-element">
-                <label class="form-element__label" for="username">Username</label>
-                <div class="form-element__control">
-                    <input id="username" class="input" placeholder="Username" autocomplete="username">
+    <section class="layout-content">
+        <div class="page-content">
+            <div id="form" class="form">
+                <h2 class="form__title">Sign In</h2>
+                <div class="form-element">
+                    <label class="form-element__label" for="username">Username</label>
+                    <div class="form-element__control">
+                        <input id="username" class="input" placeholder="Username" autocomplete="username">
+                    </div>
                 </div>
-            </div>
-            <div class="form-element">
-                <label class="form-element__label" for="password">Password</label>
-                <div class="form-element__control">
-                    <input id="password" class="input" type="password" placeholder="Password" autocomplete="current-password">
+                <div class="form-element">
+                    <label class="form-element__label" for="password">Password</label>
+                    <div class="form-element__control">
+                        <input id="password" class="input" type="password" placeholder="Password"
+                            autocomplete="current-password">
+                    </div>
                 </div>
-            </div>
-            <div class="form-element form-element_controls">
-                <div class="form-element__control">
-                    <a class="button" href="/register">Register</a>
-                    <button class="button button_inverse float_right" onclick="login()">Login</button>
+                <div class="form-element form-element_controls">
+                    <div class="form-element__control">
+                        <a class="button" href="/register">Register</a>
+                        <button class="button button_inverse float_right" onclick="login()">Login</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     <script>
         const form = document.getElementById('form');
         /** @type {HTMLInputElement} */

@@ -31,6 +31,14 @@ app.get('/', (req, res) => {
         res.location('login').status(302).send();
     }
 });
+app.get('/calendar', (req, res) => {
+    const session = security.sessions.from(req);
+    if (session) {
+        res.sendFile('calendar.html', { root });
+    } else {
+        res.location('login').status(302).send();
+    }
+});
 app.get('/login', (_, res) => {
     res.sendFile('login.html', { root });
 });
@@ -45,12 +53,12 @@ app.post('/api/login', (_, res) => {
 app.post('/api/logout', security.unauthorize);
 app.post('/api/logout', (_, res) => {
     res.status(204).send();
-})
+});
 /* user endpoints */
 app.route('/api/users')
     .get(security.denyAll)
     .post(createUser);
-app.use('/api/*', security.isAuthorized);
+app.use(/^\/api\/*$/, security.isAuthorized);
 app.route('/api/users/:userId')
     .get(getUser)
     .patch(editUser)
