@@ -18,13 +18,75 @@ fieldset {
     border: 0;
 }
 
+.global-header_container {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.global-header {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 5rem;
+    padding: 1rem 0;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .07);
+}
+
+.global-header__item {
+    margin: 0 .5rem;
+}
+
+.global-header__logo {
+    display: block;
+    width: 6rem;
+    height: 3rem;
+    background: 0 / contain no-repeat url("./assets/images/logo.svg");
+}
+
+.global-header__navigation {
+    padding-inline-start: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.global-header__navigation-item {
+    margin: 0 .5rem;
+    display: flex;
+    align-items: center;
+}
+
+.global-header__navigation-link {
+    padding: .25rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.global-header__navigation-icon {
+    display: flex;
+}
+
+.global-header__navigation-link:hover {
+    color: #444;
+}
+
+.layout-content {
+    position: absolute;
+    top: 5rem;
+    min-width: 100%;
+    height: calc(100% - 5rem);
+}
+
 .page-content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+    top: 0;
     width: 100%;
-    min-height: 100vh;
+    min-height: 100%;
     background: linear-gradient(#eee, #fff, #eee);
 }
 
@@ -64,6 +126,11 @@ fieldset {
     margin-bottom: .125rem;
     border-bottom: 0;
     padding-left: 0;
+}
+.ft{
+    height: auto;
+    margin: 10%;
+    text-align: center;
 }
 
 .form-element__legend {
@@ -139,10 +206,6 @@ fieldset {
     color: #014486;
 }
 
-.button+.button {
-    margin-left: .25rem;
-}
-
 .button_inverse {
     justify-content: center;
     background-color: #000;
@@ -156,6 +219,13 @@ fieldset {
     color: #fff;
 }
 
+.justify-content_center {
+    justify-content: center;
+}
+
+.align-items_center {
+    align-items: center;
+}
 
 .size_1-of-2 {
     width: 50%;
@@ -172,61 +242,71 @@ fieldset {
 }
 
 .row-container {
-    display: flex;
+    display: block;
     flex-direction: row;
+    width:100%
 }
 
 .storage-box {
     border: 1px solid #000;
-    justify-content: center;
-    width: 100vw;
+    
 }
 
 .foot {
-    display: flex;
-    gap: 10;
-    height: 10vh;
-    padding: 0rem;
+    
+        display: flex;
+        flex-direction: column;
+}
+
+.fb2{
+    min-width: 10%;
 }
 
 .fb {
 
-    margin-top: 10px;
+    
     height: auto;
+    margin: 10%;
 }
 
 .calender {
-    height: 90vh;
+    height: 100%;
+}
+.calendar-body {
+    height: 100%;
 }
 
+
 .list {
-    height: 80vh;
+    min-width: 90%;
 }
 
 .tform {
+    position: fixed;
+    top: 40%;
+    left: 25%;
+    width: 80%;
+    transform: translate(-25%, -25%);
+    FONT-WEIGHT: 500;
+    right: 25%;
+    z-index: 2;
+    background: linear-gradient(#eee, #fff, #eee);
+}
+.cover{
     width: 100%;
-    display: none;
+    height:100%;
+    background-color: gray;
+    opacity: 30%;
+    z-index: 1;
+}
+#cv{
+    display:none;
 }
 
 .tab {
     display: flex;
     flex: row;
 
-}
-
-.tab_button {
-    background-color: inherit;
-    float: left;
-    outline: none;
-    cursor: pointer;
-    border: 1px solid #000;
-    width: 50vw;
-    height: 10vh;
-}
-
-.tab_button:hover {
-    background-color: #777575;
-    cursor: pointer;
 }
 
 .th {
@@ -240,7 +320,7 @@ fieldset {
 .calendarm {
     display: flex;
     flex-direction: column;
-    width: 50vw;
+    width: 100%;
     height: 90vh;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -268,12 +348,17 @@ fieldset {
 .calendar-dates {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    
+}
+.calendar-dates{
+    height:100%;
 }
 
 .calendar-weekdays div,
 .calendar-dates div {
     text-align: center;
     padding: 10px;
+    height:100%
 }
 
 .calendar-weekdays div {
@@ -294,7 +379,8 @@ fieldset {
     position: fixed;
     z-index: 1;
 }
-.fixed{
+
+.fixed {
     position: fixed;
     top: 3px;
     right: 3px;
