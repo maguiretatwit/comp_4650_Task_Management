@@ -1,0 +1,387 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.global-header_container {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.global-header {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 5rem;
+    padding: 1rem 0;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .07);
+}
+
+.global-header__item {
+    margin: 0 .5rem;
+}
+
+.global-header__logo {
+    display: block;
+    width: 6rem;
+    height: 3rem;
+    background: 0 / contain no-repeat url("./assets/images/logo.svg");
+}
+
+.global-header__navigation {
+    padding-inline-start: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.global-header__navigation-item {
+    margin: 0 .5rem;
+    display: flex;
+    align-items: center;
+}
+
+.global-header__navigation-link {
+    padding: .25rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.global-header__navigation-icon {
+    display: flex;
+}
+
+.global-header__navigation-link:hover {
+    color: #444;
+}
+
+.layout-content {
+    position: absolute;
+    top: 5rem;
+    min-width: 100%;
+    height: calc(100% - 5rem);
+}
+
+.page-content {
+    display: flex;
+    flex-direction: row;
+    top: 0;
+    width: 100%;
+    min-height: 100%;
+    background: linear-gradient(#eee, #fff, #eee);
+}
+
+.form {
+    border: 1px solid #000;
+    border-radius: .5rem;
+    padding: 2rem;
+    width: 20rem;
+}
+
+.form__title {
+    margin-top: 0;
+}
+
+.form-element {
+    position: relative;
+    min-width: 0;
+    display: block;
+    margin-bottom: .5rem;
+    padding: 0 .25rem;
+    width: 100%;
+}
+
+.form-element_controls {
+    margin-top: 1rem;
+}
+
+.form-element__label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    display: inline-block;
+    color: #444;
+    font-size: .75rem;
+    padding-right: .5rem;
+    padding-top: .25rem;
+    margin-bottom: .125rem;
+    border-bottom: 0;
+    padding-left: 0;
+}
+.ft{
+    height: auto;
+    margin: 10%;
+    text-align: center;
+}
+
+.form-element__legend {
+    font-weight: 700;
+    float: left;
+}
+
+.form-element__control {
+    clear: left;
+    position: relative;
+    border-bottom: 0;
+    padding-left: 0;
+    width: 100%;
+}
+
+.form-element__row {
+    display: flex;
+    margin-bottom: .25rem;
+    margin-inline: -.25rem;
+}
+
+.form__error {
+    color: #ea001e;
+    font-size: 0.875rem;
+}
+
+.input {
+    padding: 0 1rem 0 .75rem;
+    width: 100%;
+    min-height: calc(1.875rem + 2px);
+    font-family: inherit;
+    line-height: 1.875rem;
+    border: 1px solid #c9c9c9;
+    border-radius: .25rem;
+    background-color: #fff;
+    transition: border .1s linear, background-color .1s linear;
+    display: inline-block;
+}
+
+.textarea {
+    padding: .5rem .75rem;
+    min-height: calc(1.875rem + 2px);
+    resize: vertical;
+    border: 1px solid #c9c9c9;
+    border-radius: .25rem;
+    font-family: inherit;
+    width: 100%;
+    background-color: #fff;
+}
+
+.button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-block: 0;
+    padding-inline: 1rem;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: .25rem;
+    font-size: .875rem;
+    line-height: 1.875rem;
+    text-align: center;
+    text-decoration: none;
+    color: #0176d3;
+    white-space: normal;
+    user-select: none;
+    cursor: pointer;
+    transition: border .15s linear;
+}
+
+.button:hover {
+    background-color: #f3f3f3;
+    color: #014486;
+}
+
+.button_inverse {
+    justify-content: center;
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+}
+
+.button_inverse:hover {
+    background-color: #2e2e2e;
+    border-color: #2e2e2e;
+    color: #fff;
+}
+
+.justify-content_center {
+    justify-content: center;
+}
+
+.align-items_center {
+    align-items: center;
+}
+
+.size_1-of-2 {
+    width: 50%;
+}
+
+.float_right {
+    float: right;
+}
+
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.row-container {
+    display: block;
+    flex-direction: row;
+    width:100%
+}
+
+.storage-box {
+    border: 1px solid #000;
+    
+}
+
+.foot {
+    
+        display: flex;
+        flex-direction: column;
+}
+
+.fb2{
+    min-width: 10%;
+}
+
+.fb {
+
+    
+    height: auto;
+    margin: 10%;
+}
+
+.calender {
+    height: 100%;
+}
+.calendar-body {
+    height: 100%;
+}
+
+
+.list {
+    min-width: 90%;
+}
+
+.tform {
+    position: fixed;
+    top: 40%;
+    left: 25%;
+    width: 80%;
+    transform: translate(-25%, -25%);
+    FONT-WEIGHT: 500;
+    right: 25%;
+    z-index: 2;
+    background: linear-gradient(#eee, #fff, #eee);
+}
+.cover{
+    width: 100%;
+    height:100%;
+    background-color: gray;
+    opacity: 30%;
+    z-index: 1;
+}
+#cv{
+    display:none;
+}
+
+.tab {
+    display: flex;
+    flex: row;
+
+}
+
+.th {
+    border: 0;
+}
+
+#close_task {
+    display: none;
+}
+
+.calendarm {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90vh;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.calendar-header button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+#month-year {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.calendar-weekdays,
+.calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    
+}
+.calendar-dates{
+    height:100%;
+}
+
+.calendar-weekdays div,
+.calendar-dates div {
+    text-align: center;
+    padding: 10px;
+    height:100%
+}
+
+.calendar-weekdays div {
+    font-weight: bold;
+}
+
+.calendar-dates div {
+    border: 1px solid #000000;
+    cursor: pointer;
+}
+
+.calendar-dates div:hover {
+    background-color: #f1f1f1;
+}
+
+.taskDisplay {
+    display: none;
+    position: fixed;
+    z-index: 1;
+}
+
+.fixed {
+    position: fixed;
+    top: 3px;
+    right: 3px;
+}
