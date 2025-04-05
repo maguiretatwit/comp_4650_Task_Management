@@ -13,7 +13,7 @@ interface CreateTaskOptions {
 async function getTasks(req: Request, res: security.ResponseWithSession<InferAttributes<Task>[]>, next: NextFunction) {
     const user = res.locals.session.user;
     try {
-        const tasks = await Task.findAll({ where: { userId: user.id } });
+        const tasks = await user.getTasks();
         res.json(tasks.map(task => task.toJSON()));
     } catch (error) {
         next(error);
@@ -25,7 +25,7 @@ async function createTask(req: Request<any, any, CreateTaskOptions>, res: securi
     if (req.body?.name) {
         try {
             const { name, description, priority, dueAt } = req.body;
-            const task = await Task.create({ name, description, priority, dueAt, userId: user.id });
+            const task = await user.createTask({ name, description, priority, dueAt: new Date(dueAt) });
             res.status(201).json(task.toJSON());
         } catch (error) {
             next(error);
@@ -58,7 +58,7 @@ async function editTask(req: Request<{ taskId: string }, any, Partial<CreateTask
             let task = await Task.findOne({ where: { id, userId: user.id } });
             if (task) {
                 const { name, description, priority, dueAt } = req.body;
-                await Task.update({ name, description, priority, dueAt }, { where: { id } });
+                await Task.update({ name, description, priority, dueAt: new Date(dueAt) }, { where: { id } });
                 task = await Task.findByPk(id);
                 res.json(task.toJSON());
             } else {

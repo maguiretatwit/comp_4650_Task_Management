@@ -58,7 +58,7 @@ app.post('/api/logout', (_, res) => {
 app.route('/api/users')
     .get(security.denyAll)
     .post(createUser);
-app.use(/^\/api\/*$/, security.isAuthorized);
+app.use('/api/*', security.isAuthorized);
 app.route('/api/users/:userId')
     .get(getUser)
     .patch(editUser)

@@ -1,4 +1,4 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from 'sequelize';
+import { BelongsTo, BelongsToCreateAssociationMixin, BelongsToGetAssociationMixin, BelongsToSetAssociationMixin, CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, NonAttribute, Sequelize } from 'sequelize';
 import { User } from './user';
 
 class Task extends Model<
@@ -7,12 +7,20 @@ class Task extends Model<
 > {
     declare id: CreationOptional<number>;
     declare name: string;
-    declare description: CreationOptional<string>;
+    declare description: CreationOptional<string | null>;
     declare priority: CreationOptional<number>;
     declare isComplete: CreationOptional<boolean>;
-    declare dueAt: CreationOptional<Date | string>;
-    declare userId: number;
-    declare user: NonAttribute<User>;
+    declare dueAt: CreationOptional<Date>;
+    declare userId: ForeignKey<User['id']>;
+    declare createdAt: CreationOptional<Date>;
+    declare updatedAt: CreationOptional<Date>;
+    declare user?: NonAttribute<User>;
+    declare getUser: BelongsToGetAssociationMixin<User>;
+    declare setUser: BelongsToSetAssociationMixin<User, number>;
+    declare createUser: BelongsToCreateAssociationMixin<User>;
+    declare static associations: {
+        user: BelongsTo<User>;
+    }
 }
 
 
@@ -20,12 +28,13 @@ function taskModelInit(sequelize: Sequelize) {
     Task.init(
         {
             id: {
-                type: DataTypes.INTEGER({ unsigned: true }),
+                type: DataTypes.INTEGER.UNSIGNED,
                 primaryKey: true,
                 autoIncrement: true
             },
             name: {
                 type: DataTypes.STRING,
+                allowNull: false,
                 validate: {
                     notEmpty: true
                 }
@@ -35,6 +44,7 @@ function taskModelInit(sequelize: Sequelize) {
             },
             priority: {
                 type: DataTypes.TINYINT,
+                allowNull: false,
                 defaultValue: 1,
                 validate: {
                     min: 1,
@@ -43,10 +53,12 @@ function taskModelInit(sequelize: Sequelize) {
             },
             isComplete: {
                 type: DataTypes.BOOLEAN,
+                allowNull: false,
                 defaultValue: false
             },
             dueAt: {
                 type: DataTypes.DATE,
+                allowNull: false,
                 defaultValue() {
                     let date = new Date();
                     date.setDate(date.getDate() + 1);
@@ -61,20 +73,14 @@ function taskModelInit(sequelize: Sequelize) {
                     }
                 }
             },
-            userId: {
-                type: DataTypes.INTEGER({ unsigned: true }),
-                references: {
-                    model: User
-                }
-            }
+            createdAt: DataTypes.DATE,
+            updatedAt: DataTypes.DATE
         },
         {
             tableName: 'tasks',
             sequelize
         }
     );
-    Task.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-    User.hasMany(Task, { foreignKey: 'userId', as: 'tasks' });
 }
 
 export { Task, taskModelInit };
