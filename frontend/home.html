@@ -9,150 +9,145 @@
 </head>
 
 <body>
-    <section class="layout-content">
-        <header class="global-header_container">
-            <div class="global-header">
-                <nav class="global-header__item">
-                    <ul class="global-header__navigation">
-                        <li class="global-header__navigation-item">
-                            <a class="global-header__navigation-link" href="/">Home</a>
-                        </li>
-                        <li class="global-header__navigation-item">
-                            <a class="global-header__navigation-link" href="/calendar">Calendar</a>
-                        </li>
-                        
-                        <li class="global-header__navigation-item">
-                            <button class="button button_inverse" onclick="logout()">Logout</button>
-                        </li>
+    <div class="page-content">
+        <button class="button button_inverse fixed" onclick="logout()">Logout</button>
+
+        <div class="tab">
+            <button class="tab_button bu" onclick="listTab()">
+                <h1 class="th">List</h1>
+            </button>
+            <button class="tab_button" onclick="calenderTab()">
+                <h1 class="th">Calender</h1>
+            </button>
+        </div>
+        <div class="row-container">
+            <div class="tab_content" id="list">
+                <h1>List</h1>
+                <div class="storage-box list" id="li">
+                    <button class="button button_inverse float_right" id="open_task" name="New Task"
+                        onclick="openTask()">+</button>
+                    <button class="button button_inverse float_right" id="close_task" name="New Task"
+                        onclick="closeTask()">+</button>
+                    <div class="taskDisplay" id="taskDisplayList">
+
+                    </div>
+                    <!-- List -->
+                    <ul class="task_list">
+
                     </ul>
-                </nav>
-            </div>
-        </header>
-        <div class="page-content">
-
-            <div class="tab">
-                <button class="tab_button bu" onclick="listTab()">
-                    <h1 class="th">List</h1>
-                </button>
-                <button class="tab_button" onclick="calenderTab()">
-                    <h1 class="th">Calender</h1>
-                </button>
-            </div>
-            <div class="row-container">
-                <div class="tab_content" id="list">
-                    <h1>List</h1>
-                    <div class="storage-box list" id="li">
-                        <button class="button button_inverse float_right" id="open_task" name="New Task"
-                            onclick="openTask()">+</button>
-                        <button class="button button_inverse float_right" id="close_task" name="New Task"
-                            onclick="closeTask()">+</button>
-                        <div class="taskDisplay" id="taskDisplayList">
-
+                    <!-- New Task Form -->
+                    <div id="task-form" class="form tform">
+                        <!-- Name -->
+                        <div class="form-element">
+                            <label class="form-element__label" for="task-name">Name</label>
+                            <div class="form-element__control">
+                                <input id="task-name" class="input" placeholder="Name">
+                            </div>
                         </div>
-                        <!-- List -->
-                        <ul class="task_list"></ul>
-                        <!-- New Task Form -->
-                        <div id="task-form" class="form tform">
-                            <!-- Name -->
-                            <div class="form-element">
-                                <label class="form-element__label" for="task-name">Name</label>
-                                <div class="form-element__control">
-                                    <input id="task-name" class="input" placeholder="Name">
-                                </div>
+                        <!-- Description -->
+                        <div class="form-element">
+                            <label class="form-element__label" for="task-description">Description</label>
+                            <div class="form-element__control">
+                                <textarea id="task-description" class="textarea" placeholder="Description"></textarea>
                             </div>
-                            <!-- Description -->
-                            <div class="form-element">
-                                <label class="form-element__label" for="task-description">Description</label>
-                                <div class="form-element__control">
-                                    <textarea id="task-description" class="textarea"
-                                        placeholder="Description"></textarea>
-                                </div>
+                        </div>
+                        <!-- Priority -->
+                        <div class="form-element">
+                            <label class="form-element__label" for="task-priority">Priority</label>
+                            <div class="form-element__control">
+                                <select id="task-priority" class="input" placeholder="Priority">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                </select>
                             </div>
-                            <!-- Priority -->
-                            <div class="form-element">
-                                <label class="form-element__label" for="task-priority">Priority</label>
-                                <div class="form-element__control">
-                                    <select id="task-priority" class="input" placeholder="Priority">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                        <option>10</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- Due Date/Time -->
-                            <fieldset class="form-element">
-                                <legend class="form-element__legend form-element__label">Due Date</legend>
-                                <div class="form-element__control">
-                                    <div class="form-element__row">
-                                        <div class="form-element size_1-of-2">
-                                            <label class="form-element__label" for="task-due-date">Date</label>
-                                            <div class="form-element__control">
-                                                <input id="task-due-date" class="input" type="date" placeholder="Date">
-                                            </div>
+                        </div>
+                        <!-- Due Date/Time -->
+                        <fieldset class="form-element">
+                            <legend class="form-element__legend form-element__label">Due Date</legend>
+                            <div class="form-element__control">
+                                <div class="form-element__row">
+                                    <div class="form-element size_1-of-2">
+                                        <label class="form-element__label" for="task-due-date">Date</label>
+                                        <div class="form-element__control">
+                                            <input id="task-due-date" class="input" type="date" placeholder="Date">
                                         </div>
-                                        <div class="form-element size_1-of-2">
-                                            <label class="form-element__label" for="task-due-time">Time</label>
-                                            <div class="form-element__control">
-                                                <input id="task-due-time" class="input" type="time" placeholder="Time">
-                                            </div>
+                                    </div>
+                                    <div class="form-element size_1-of-2">
+                                        <label class="form-element__label" for="task-due-time">Time</label>
+                                        <div class="form-element__control">
+                                            <input id="task-due-time" class="input" type="time" placeholder="Time">
                                         </div>
                                     </div>
                                 </div>
-                            </fieldset>
-                            <!-- Submit Button -->
-                            <div class="form-element form-element_controls">
-                                <div class="form-element__control clearfix">
-                                    <button class="button button_inverse float_right"
-                                        onclick="closeTask()">Submit</button>
-                                </div>
+                            </div>
+                        </fieldset>
+                        <!-- Submit Button -->
+                        <div class="form-element form-element_controls">
+                            <div class="form-element__control clearfix">
+                                <button class="button button_inverse float_right" onclick="closeTask()">Submit</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="storage-box foot">
-                        <button class="button button_inverse fb" onclick="due_date_sort()">Due-Date</button>
-                        <button class="button button_inverse fb" onclick="prioritySort()">Priority</button>
-                        <button class="button button_inverse fb">Recomended</button>
                     </div>
                 </div>
-                <div class="tab_content">
-                    <h1>Calender</h1>
-                    <div class="storage-box calender" id="calender">
-                        <div class="calendarm">
-                            <div class="calendar-header">
-                                <button id="prev-month">‹</button>
-                                <div id="month-year"></div>
-                                <button id="next-month">›</button>
+                <div class="storage-box foot">
+                    <button class="button button_inverse fb" onclick="due_date_sort()">Due-Date</button>
+                    <button class="button button_inverse fb" onclick="prioritySort()">Priority</button>
+                    <button class="button button_inverse fb">Recomended</button>
+                </div>
+            </div>
+            <div class="tab_content">
+                <h1>Calender</h1>
+                <div class="storage-box calender" id="calender">
+                    <div class="calendarm">
+                        <div class="calendar-header">
+                            <button id="prev-month">‹</button>
+                            <div id="month-year"></div>
+                            <button id="next-month">›</button>
+                        </div>
+                        <div class="calendar-body">
+                            <div class="calendar-weekdays">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
                             </div>
-                            <div class="calendar-body">
-                                <div class="calendar-weekdays">
-                                    <div>Sun</div>
-                                    <div>Mon</div>
-                                    <div>Tue</div>
-                                    <div>Wed</div>
-                                    <div>Thu</div>
-                                    <div>Fri</div>
-                                    <div>Sat</div>
-                                </div>
-                                <div class="calendar-dates">
-                                </div>
+                            <div class="calendar-dates">
                             </div>
                         </div>
-                        <div class="taskDisplay" id="taskDisplayCal">
-
-                        </div>
+                    </div>
+                    <div class="taskDisplay" id="taskDisplayCal">
+                        
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <script src="index.js"></script>
+    </div>
+    <script src="index.js">
+        
+    </script>
+    <div style="display:none">
+        <!-- Logout Button Example -->
+        <button class="button button_inverse" onclick="logout()">Logout</button>
+        <script>
+            async function logout() {
+                await fetch('/api/logout', { method: 'POST' });
+                location.replace('/login');
+            }
+
+
+        </script>
+    </div>
 
 </body>
 

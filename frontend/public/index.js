@@ -1,7 +1,3 @@
-async function logout() {
-  await fetch('/api/logout', { method: 'POST' });
-  location.replace('/login');
-}
 
 function openTask() {
   document.getElementById("task-form").style.display = "block";
@@ -9,35 +5,13 @@ function openTask() {
   document.getElementById("close_task").style.display = "block";
 
 }
-
-async function createTask(options) {
-  const name = options.name;
-  const dueAt = options.dueAt;
-  if (name && dueAt) {
-    const payload = { name, dueAt };
-    const body = JSON.stringify(payload);
-    const headers = { 'content-type': 'application/json' };
-    const res = await fetch('/api/tasks', { method: 'POST', headers, body });
-    if (res.ok) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-}
-
-async function saveTaskForm() {
-  const name = document.getElementById("task-name").value;
-  const description = document.getElementById("task-description").value;
-  const priority = document.getElementById("task-priority").value;
-  const dueDate = document.getElementById("task-due-date").value;
-  const dueTime = document.getElementById("task-due-time").value;
-}
-
 function closeTask() {
-  saveTaskForm();
+  const vals = [];
+  vals[0] = document.getElementById("task-name");
+  vals[1] = document.getElementById("task-description");
+  vals[2] = document.getElementById("task-priority");
+  vals[3] = document.getElementById("task-due-date");
+  createTask(vals);
   document.getElementById("task-form").style.display = "none";
   document.getElementById("close_task").style.display = "none";
   document.getElementById("open_task").style.display = "block";
@@ -46,6 +20,7 @@ function closeTask() {
 
 
 }
+
 
 
 function setTasks(tasks) {
@@ -63,59 +38,59 @@ function setTasks(tasks) {
 
 listItemclass.addEventListener('click', (e) => {
   displayTask("listItem")
-  document.getElementById("taskDisplayList").style.display = "block";
+  document.getElementById("taskDisplayList").style.display="block";
 });
 calendarDates.addEventListener('click', (e) => {
   if (e.target.textContent !== '') {
-    document.getElementById("taskDisplayCalender").style.display = "block"
-    cList = document.createElement('ul');
+    document.getElementById("taskDisplayCalender").style.display="block"
+    cList=document.createElement('ul');
     document.getElementById("taskDisplayCalender").appendChild(cList);
     cList.replaceChildren();
-    const tasks = getTasks();
-    for (let i = 0; i < tasks.length; i++) {
-      const task = document.createElement('li');
-      task.textContent = tasks[i].name;
-      task.setAttribute("id", "listItem")
-      task.setAttribute("class", "listItemClass")
+    const tasks=getTasks();
+  for (let i = 0; i < tasks.length; i++) {
+         const task = document.createElement('li');
+    task.textContent = tasks[i].name;
+    task.setAttribute("id", "listItem")
+    task.setAttribute("class", "listItemClass")
 
-      document.getElementById('task_list').appendChild(task);
-    }
+    document.getElementById('task_list').appendChild(task);
+  }
   }
 });
 
 
 function displayTask(drop) {
-  const t = getTasks().find(({ name }) => name === drop.textContent);
-
-  title = document.createElement('h1');
-  title.textContent = t.name;
-  drop.appendChild(title);
-  title.setAttribute("");
-  desc = document.createElement('div');
-  desc.textContent = t.description;
-  drop.appendChild(desc);
-  desc.setAttribute("");
-  p = document.createElement('div');
-  p.textContent = t.name;
-  drop.appendChild(p);
-  p.setAttribute("");
-  da = document.createElement('div');
-  da.textContent = t.name;
-  drop.appendChild(da);
-  da.setAttribute("");
-  cb = document.createElement('button')
-  drop.appendChild(cb);
-  eb = document.createElement('button')
-  drop.appendChild(eb);
-  db = document.createElement('button')
-  drop.appendChild(db);
-
+  const t=getTasks().find(({ name }) => name === drop.textContent);
+    
+    title=document.createElement('h1');
+    title.textContent=t.name;
+    drop.appendChild(title);
+    title.setAttribute("");
+    desc=document.createElement('div');
+    desc.textContent=t.description;
+    drop.appendChild(desc);
+    desc.setAttribute("");
+    p=document.createElement('div');
+    p.textContent=t.name;
+    drop.appendChild(p);
+    p.setAttribute("");
+    da=document.createElement('div');
+    da.textContent=t.name;
+    drop.appendChild(da);
+    da.setAttribute("");
+    cb=document.createElement('button')
+    drop.appendChild(cb);
+    eb=document.createElement('button')
+    drop.appendChild(eb);
+    db=document.createElement('button')
+    drop.appendChild(db);
+  
 
 }
 
 
-function due_Date_sort() {
-  const tasks = fetch('/tasks', { method: 'GET' });
+function due_Date_sort(){
+  const tasks=fetch('/tasks',{ method: 'GET'});
   function compare(a, b) {
     const dateA = a.dueAt;
     const dateB = b.dueAt;
@@ -126,12 +101,12 @@ function due_Date_sort() {
       comparison = 1;
     }
     return comparison;
-  }
+  }  
   tasks.sort(compare);
   setTasks(tasks);
 }
-function prioritySort() {
-  const tasks = fetch('/tasks', { method: 'GET' });
+async function prioritySort(){
+  const tasks=await fetch('/tasks',{ method: 'GET'});
   function compare(a, b) {
     const prioA = a.priority;
     const prioB = b.priority;
@@ -142,12 +117,12 @@ function prioritySort() {
       comparison = -1;
     }
     return comparison;
-  }
+  }  
   tasks.sort(compare);
   setTasks(tasks);
 }
 
-setTasks(fetch('/tasks', { method: 'GET' }));
+setTasks(fetch('/tasks',{ method: 'GET'}));
 
 function calenderTab(evt, tab) {
   document.getElementById("list").style.display = "none";
@@ -272,11 +247,11 @@ function renderCalendar(month, year) {
   for (let i = 1; i <= daysInMonth; i++) {
     const day = document.createElement('div');
     day.textContent = i;
-    cd = new Date(year, month, i);
-    let found = 1;
+    cd=new Date(year, month,i);
+    let found=1;
     found = getTasks.find(({ dueAt }) => dueAt === cd);
-    if (found != 1) {
-      day.setAttribute("background", "red")
+    if(found!=1){
+    day.setAttribute("background", "red")
     }
     calendarDates.appendChild(day);
   }
@@ -304,12 +279,12 @@ nextMonthBtn.addEventListener('click', () => {
 
 day.addEventListener('click', (e) => {
   if (e.target.textContent !== '') {
-    cd = new Date(currentYear, currentMonth, day.textContent);
-    let cdTasks = [];
-    let j = 0;
-    for (let i = 0; i < getTasks.length; i++) {
-      if (getTasks[i].dueAt == cd) {
-        cdTasks[j] = getTasks[i];
+    cd = new Date(currentYear,currentMonth,day.textContent);
+    let cdTasks=[];
+    let j=0;
+    for(let i=0;i<getTasks.length;i++){
+      if(getTasks[i].dueAt==cd){
+        cdTasks[j]=getTasks[i];
         j++;
       }
     }
