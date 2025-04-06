@@ -1,3 +1,15 @@
+//const { response } = require("express");
+
+let tasks=[];
+async function getAllTasks() {
+  const headers = { 'content-type': 'application/json' };
+  const res = await fetch('/api/tasks', { method: 'GET' });
+  tasks=await res.json();
+
+}
+getAllTasks();
+console.log(tasks);
+
 async function logout() {
   await fetch('/api/logout', { method: 'POST' });
   location.replace('/login');
@@ -22,8 +34,8 @@ function closeTask() {
 
 async function createTask(options) {
   const name = options.name;
-  const description=options.description;
-  const priority=options.priority;
+  const description = options.description;
+  const priority = options.priority;
 
   const dueAt = options.dueAt;
   if (name && dueAt) {
@@ -47,26 +59,36 @@ async function saveTaskForm() {
   const p = document.getElementById("task-priority").value;
   const dueDate = document.getElementById("task-due-date").value;
   const dueTime = document.getElementById("task-due-time").value;
-  const due= new date(dueDate.slice(0,5),dueDate.slice(6,8),dueDate.slice(9,11),dueTime.slice(0,3),dueTime.slice(4,6));
-  const task = {name:n, description:d, priority:p, dueAt: due};
+  //ueDate.slice(0,5),dueDate.slice(6,8),dueDate.slice(9,11),dueTime.slice(0,3),dueTime.slice(4,6)
+  const due= new Date(parseInt(dueDate.slice(0,5)),parseInt(dueDate.slice(6,8)),parseInt(dueDate.slice(9,11)),parseInt(dueTime.slice(0,3)),parseInt(dueTime.slice(4,6)));
+  console.log(due);
+  const task = { name: n, description: d, priority: p, dueAt: due };
   createTask(task);
+  setTasks();
+  closeTask();
 }
 
 
-
-
-function setTasks(tasks) {
-  document.getElementById('task_list').replaceChildren();
+async function setTasks() {
+  await getAllTasks();
+  console.log(tasks[0].name);
+  document.getElementById('taskDisplayList').replaceChildren();
   for (let i = 0; i < tasks.length; i++) {
-    const task = document.createElement('li');
+    const task = document.createElement('div');
+    task.setAttribute("class","storage-box list-item")
+    task.style.whiteSpace = "pre-line";
     task.textContent = tasks[i].name;
-    task.setAttribute("id", "listItem")
-    task.setAttribute("class", "listItemClass")
+    task.textContent += "\n";
+    task.textContent += tasks[i].dueAt.slice(0,10);
 
-    document.getElementById('task_list').appendChild(task);
+    
+    
+
+    document.getElementById('taskDisplayList').appendChild(task);
   }
 
 }
+setTasks();
 
 /*
 calendarDates.addEventListener('click', (e) => {
