@@ -30,15 +30,28 @@
         </header>
         <div class="page-content">
             <div class="storage-box list" id="li">
-                <div class="taskDisplay" id="taskDisplayList">
-
-                </div>
+                
                 <div class="cover" id="cv">
+                    
                 </div>
-               
-                
+                <div class="taskDisplay" id="taskDisplayList">
+                </div>
+
+
+
                 <!-- List -->
-                
+                <div id="fullTask" class="taskBox" style="display: none;">
+                    <div id="nm">Name:</div>
+                    <bp></bp>
+                    <div id="desc">Description:</div>
+                    <bp></bp>
+                    <div id="prio">Priority:</div>
+                    <bp></bp>
+                    <div id="dt">Date:</div>
+                    <bp></bp>
+                    <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
+                    <button class="button button_inverse" onclick="deleteTask()">Delete</button>
+                </div>
                 <!-- New Task Form -->
                 <div id="task-form" class="form tform" style="display: none;">
                     <!-- Name -->
@@ -100,21 +113,20 @@
                         </div>
                     </div>
                 </div>
-                
-            </div>
-            <div class="storage-box fb2">
-            <div class="foot">
-                <div class="ft"> Add Task</div>
-                <button class="button button_inverse fb" id="close_task" name="New Task" onclick="closeTask()"
-                style="display: none;">+</button>
-                <button class="button button_inverse fb" id="open_task" name="New Task" onclick="openTask()"
-                    style="display: block;">+</button>
-                    <div class="ft">Sort By</div>
-                    <button class="button button_inverse fb"
-                    onclick="due_date_sort()">Due-Date</button>
-                <button class="button button_inverse fb" onclick="prioritySort()">Priority</button>
 
             </div>
+            <div class="storage-box fb2">
+                <div class="foot">
+                    <div class="ft"> Add Task</div>
+                    <button class="button button_inverse fb" id="close_task" name="New Task" onclick="closeTask()"
+                        style="display: none;">+</button>
+                    <button class="button button_inverse fb" id="open_task" name="New Task" onclick="openTask()"
+                        style="display: block;">+</button>
+                    <div class="ft">Sort By</div>
+                    <button class="button button_inverse fb" onclick="dueDateSort()">Due-Date</button>
+                    <button class="button button_inverse fb" onclick="prioritySort()">Priority</button>
+
+                </div>
             </div>
         </div>
 
