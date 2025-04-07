@@ -305,12 +305,26 @@ fieldset {
     background: linear-gradient(#eee, #fff, #eee);
 }
 
+.taskBox{
+    position: fixed;
+    top: 40%;
+    left: 25%;
+    width: 80%;
+    transform: translate(-25%, -25%);
+    FONT-WEIGHT: 500;
+    right: 25%;
+    z-index: 2;
+    background: linear-gradient(#eee, #fff, #eee);
+}
+
 .cover {
-    width: 100%;
+    width: 90%;
     height: 100%;
     background-color: gray;
     opacity: 20%;
+    position: fixed;
     z-index: 1;
+
 }
 
 #cv {

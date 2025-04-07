@@ -1,20 +1,33 @@
 //const { response } = require("express");
 
-let tasks=[];
+let tasks = [];
 async function getAllTasks() {
   const headers = { 'content-type': 'application/json' };
   const res = await fetch('/api/tasks', { method: 'GET' });
-  tasks=await res.json();
+  tasks = await res.json();
 
 }
-getAllTasks();
-console.log(tasks);
+async function start() {
+  await getAllTasks();
+  setTasks();
+}
+start();
+
+
 
 async function logout() {
   await fetch('/api/logout', { method: 'POST' });
   location.replace('/login');
 }
-
+async function deleteTask() {
+  const name = document.getElementById("nm");
+  const t = tasks.find(t => t.name === name.textContent.slice(6, name.textContent.length));
+  const id = t.id
+  const headers = { 'content-type': 'application/json' };
+  await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+  closeOpenTask();
+  setTasks();
+}
 function openTask() {
   document.getElementById("task-form").style.display = "block";
   document.getElementById("open_task").style.display = "none";
@@ -29,6 +42,11 @@ function closeTask() {
   document.getElementById("cv").style.display = "none";
 
 
+
+}
+function closeOpenTask() {
+  document.getElementById("cv").style.display = "none";
+  document.getElementById("fullTask").style.display = "none";
 
 }
 
@@ -60,8 +78,7 @@ async function saveTaskForm() {
   const dueDate = document.getElementById("task-due-date").value;
   const dueTime = document.getElementById("task-due-time").value;
   //ueDate.slice(0,5),dueDate.slice(6,8),dueDate.slice(9,11),dueTime.slice(0,3),dueTime.slice(4,6)
-  const due= new Date(parseInt(dueDate.slice(0,5)),parseInt(dueDate.slice(6,8)),parseInt(dueDate.slice(9,11)),parseInt(dueTime.slice(0,3)),parseInt(dueTime.slice(4,6)));
-  console.log(due);
+  const due = new Date(parseInt(dueDate.slice(0, 5)), parseInt(dueDate.slice(6, 8)), parseInt(dueDate.slice(9, 11)), parseInt(dueTime.slice(0, 3)), parseInt(dueTime.slice(4, 6)));
   const task = { name: n, description: d, priority: p, dueAt: due };
   createTask(task);
   setTasks();
@@ -69,26 +86,39 @@ async function saveTaskForm() {
 }
 
 
-async function setTasks() {
-  await getAllTasks();
-  console.log(tasks[0].name);
-  document.getElementById('taskDisplayList').replaceChildren();
-  for (let i = 0; i < tasks.length; i++) {
-    const task = document.createElement('div');
-    task.setAttribute("class","storage-box list-item")
-    task.style.whiteSpace = "pre-line";
-    task.textContent = tasks[i].name;
-    task.textContent += "\n";
-    task.textContent += tasks[i].dueAt.slice(0,10);
+function setTasks() {
+  if ((document.getElementById('taskDisplayList')) != null) {
+    document.getElementById('taskDisplayList').innerHTML = '';
+    for (let i = 0; i < tasks.length; i++) {
+      const task = document.createElement('div');
+      task.setAttribute("class", "storage-box list-item")
+      task.style.whiteSpace = "pre-line";
+      task.textContent = tasks[i].name;
+      task.textContent += "\n";
+      task.textContent += tasks[i].dueAt.slice(0, 10);
+      document.getElementById('taskDisplayList').appendChild(task);
+    }
+    const listItems = document.querySelectorAll(".list-item")
 
-    
-    
-
-    document.getElementById('taskDisplayList').appendChild(task);
+    listItems.forEach(listItem => {
+      listItem.addEventListener('click', (event) => {
+        document.getElementById("cv").style.display = "block";
+        document.getElementById("fullTask").style.display = "block"
+        //console.log(listItem.textContent.slice(0,listItem.textContent.length-10));
+        const t = tasks.find(t => t.name === listItem.textContent.slice(0, listItem.textContent.length - 11));
+        document.getElementById("nm").textContent = "Name: " + t.name;
+        document.getElementById("desc").textContent = t.description;
+        document.getElementById("prio").textContent = "Priority: " + t.priority;
+        document.getElementById("dt").textContent = "due on: " + t.dueAt.slice(0, 10) + " " + t.dueAt.slice(11, 16);
+      });
+    });
   }
 
 }
 setTasks();
+
+
+
 
 /*
 calendarDates.addEventListener('click', (e) => {
@@ -140,8 +170,7 @@ function displayTask(drop) {
 }
 
 
-function due_Date_sort() {
-  const tasks = fetch('/tasks', { method: 'GET' });
+function dueDateSort() {
   function compare(a, b) {
     const dateA = a.dueAt;
     const dateB = b.dueAt;
@@ -154,23 +183,27 @@ function due_Date_sort() {
     return comparison;
   }
   tasks.sort(compare);
-  setTasks(tasks);
+  tasks.reverse();
+  setTasks();
+  console.log(tasks)
+
 }
 function prioritySort() {
-  const tasks = fetch('/tasks', { method: 'GET' });
   function compare(a, b) {
     const prioA = a.priority;
     const prioB = b.priority;
     let comparison = 0;
-    if (dateA > dateB) {
+    if (prioA > prioB) {
       comparison = 1;
-    } else if (dateA < dateB) {
+    } else if (prioA < prioB) {
       comparison = -1;
     }
     return comparison;
   }
   tasks.sort(compare);
-  setTasks(tasks);
+  tasks.reverse();
+  setTasks();
+  console.log(tasks)
 }
 //const res = await fetch('/api/tasks', { method: 'POST', headers, body })
 //setTasks();
@@ -206,18 +239,34 @@ function renderCalendar(month, year) {
   for (let i = 1; i <= daysInMonth; i++) {
     const day = document.createElement('div');
     day.textContent = i;
+    let d=i;
+    if(d/10<1){
+      d="0"+d;
+    }
+    let m=month+1;
+    if(m/10<1){
+      m="0"+m;
+    }
     cd = new Date(year, month, i);
+
     let found = 1;
-    /*found = getTasks.find(({ dueAt }) => dueAt === cd);
-    if (found != 1) {
-      day.setAttribute("background", "red")
-    }*/
+
+    found = tasks.find(({ dueAt }) => dueAt.toString().slice(0,10) === year+"-"+m+"-"+d);
+    //console.log(tasks[0].dueAt.toString().slice(0,10));
+    //console.log(year+"-"+m+"-"+d);
+    console.log(found);
+    if (found != undefined) {
+      console.log("test");
+      day.style.backgroundColor="#c67171";
+    }
     calendarDates.appendChild(day);
   }
 }
-
-renderCalendar(currentMonth, currentYear);
-
+async function calStart() {
+  await getAllTasks();
+  renderCalendar(currentMonth, currentYear);
+}
+calStart();
 prevMonthBtn.addEventListener('click', () => {
   currentMonth--;
   if (currentMonth < 0) {
@@ -236,18 +285,4 @@ nextMonthBtn.addEventListener('click', () => {
   renderCalendar(currentMonth, currentYear);
 });
 
-day.addEventListener('click', (e) => {
-  if (e.target.textContent !== '') {
-    cd = new Date(currentYear, currentMonth, day.textContent);
-    let cdTasks = [];
-    let j = 0;
-    for (let i = 0; i < getTasks.length; i++) {
-      if (getTasks[i].dueAt == cd) {
-        cdTasks[j] = getTasks[i];
-        j++;
-      }
-    }
 
-
-  }
-});
