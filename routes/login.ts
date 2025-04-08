@@ -8,20 +8,19 @@ interface LoginOptions {
 }
 
 async function login(req: Request<any, any, LoginOptions>, res: Response, next: NextFunction) {
-    if (req.body?.username && req.body?.password) {
-        try {
-            const { username, password } = req.body;
-            const user = await User.findOne({ where: { username, password: security.hash(password) } });
-            if (user) {
-                security.authorize(user, res, next);
-            } else {
-                res.status(401).send();
-            }
-        } catch (error) {
-            next(error);
+    const { username, password } = req.body;
+    try {
+        /* find user */
+        const user = await User.findOne({ where: { username, password: security.hash(password) } });
+        if (user) {
+            /* authorize user */
+            security.authorize(user, res, next);
+        } else {
+            /* send 401 Unauthorized */
+            res.status(401).send();
         }
-    } else {
-        res.status(400).send({ type: 'MISSING_PARAMETERS' });
+    } catch (error) {
+        next(error);
     }
 }
 

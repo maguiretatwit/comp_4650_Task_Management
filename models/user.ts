@@ -12,7 +12,7 @@ class User extends Model<
     declare password: string;
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
-    declare task?: NonAttribute<Task[]>;
+    declare tasks?: NonAttribute<Task[]>;
     declare getTasks: HasManyGetAssociationsMixin<Task>;
     declare addTask: HasManyAddAssociationMixin<Task, number>;
     declare addTasks: HasManyAddAssociationsMixin<Task, number>;

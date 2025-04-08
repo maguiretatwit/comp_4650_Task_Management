@@ -6,9 +6,10 @@ import http from 'http';
 import https from 'https';
 import { sequelize } from './models';
 import { login } from './routes/login';
-import { createTask, deleteTask, editTask, getTask, getTasks } from './routes/tasks';
+import { createTask, deleteTask, updateTask, getTask, getTasks } from './routes/tasks';
 import { createUser, deleteUser, editUser, getUser } from './routes/users';
 import * as security from './security';
+import { hasProperties } from './routes/utils';
 
 /* create express app */
 const root = './frontend';
@@ -46,6 +47,7 @@ app.get('/register', (_, res) => {
     res.sendFile('register.html', { root });
 });
 /* login/logout endpoints */
+app.post('/api/login', hasProperties({ allOf: ['username', 'password'] }));
 app.post('/api/login', login);
 app.post('/api/login', (_, res) => {
     res.status(204).send();
@@ -57,19 +59,23 @@ app.post('/api/logout', (_, res) => {
 /* user endpoints */
 app.route('/api/users')
     .get(security.denyAll)
+    .post(hasProperties({ allOf: ['username', 'email', 'password'] }))
     .post(createUser);
 app.use('/api/*', security.isAuthorized);
 app.route('/api/users/:userId')
     .get(getUser)
+    .patch(hasProperties({ anyOf: ['username', 'email', 'password'] }))
     .patch(editUser)
     .delete(deleteUser);
 /* task endpoints */
 app.route('/api/tasks')
     .get(getTasks)
+    .post(hasProperties({ allOf: ['name'] }))
     .post(createTask);
 app.route('/api/tasks/:taskId')
     .get(getTask)
-    .patch(editTask)
+    .patch(hasProperties({ anyOf: ['name', 'description', 'priority', 'isComplete', 'dueAt'] }))
+    .patch(updateTask)
     .delete(deleteTask);
 
 /* create server */
@@ -86,7 +92,7 @@ if (existsSync('./security/cert.key') && existsSync('./security/cert.pem')) {
 
 async function init() {
     /* sync database */
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
 
     /* listen */
     server.listen(port, () => {
