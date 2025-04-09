@@ -114,6 +114,9 @@
         /** @param {SubmitEvent} event */
         async function handleGetResetLink(event) {
             event.preventDefault();
+            /** @type {HTMLButtonElement} */
+            const submitButton = event.submitter;
+            submitButton.disabled = true;
             /** @type {HTMLFormElement} */
             const form = event.currentTarget;
             /** @type {[HTMLInputElement]} */
@@ -135,6 +138,7 @@
                 showError(form);
             }
             form.reportValidity();
+            submitButton.disabled = false;
         }
         function handleBack() {
             resetForm.hidden = true;
