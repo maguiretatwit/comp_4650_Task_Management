@@ -51,7 +51,7 @@ async function authorize(user: User, res: Response, next: NextFunction) {
   let token = sessions.tokenOf(user);
   if (!token) {
     // create new session
-    token = generateKey();
+    token = generateToken();
     sessions.put(token, { user: user });
   }
   // set cookie
@@ -65,7 +65,7 @@ function unauthorize(req: Request, res: Response, next: NextFunction) {
   const session = sessions.from(req);
   if (session) {
     // delete existing session
-    sessions.delete(sessions.tokenOf(session.user));
+    sessions.delete(sessions.tokenOf(session.user) as string);
   }
   // clear cookie
   res.clearCookie('TOKEN');
@@ -92,12 +92,13 @@ function hash(data: string) {
   return createHash('sha256').update(data).digest('hex');
 }
 
-function generateKey() {
+function generateToken() {
   return randomUUID();
 }
 
 export {
   ResponseWithSession,
+  Sessions,
   Session,
   sessions,
   authorize,
@@ -105,5 +106,5 @@ export {
   isAuthorized,
   denyAll,
   hash,
-  generateKey
+  generateToken
 };

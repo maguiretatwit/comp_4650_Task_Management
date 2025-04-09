@@ -10,57 +10,136 @@
 
 <body>
     <div class="layout-content page-content align-items_center justify-content_center">
-        <div id="form" class="form">
+        <form id="login-form" class="form" onsubmit="handleLogin(event)">
             <h2 class="form__title">Sign In</h2>
             <div class="form-element">
                 <label class="form-element__label" for="username">Username</label>
                 <div class="form-element__control">
-                    <input id="username" class="input" placeholder="Username" autocomplete="username">
+                    <input id="username" class="input" name="username" placeholder="Username" autocomplete="username"
+                        required>
                 </div>
             </div>
             <div class="form-element">
                 <label class="form-element__label" for="password">Password</label>
                 <div class="form-element__control">
-                    <input id="password" class="input" type="password" placeholder="Password"
-                        autocomplete="current-password">
+                    <input id="password" class="input" type="password" name="password" placeholder="Password"
+                        autocomplete="current-password" required>
                 </div>
             </div>
-            <div class="form-element form-element_controls">
+            <div class="form-element m-top_small">
                 <div class="form-element__control">
                     <a class="button" href="/register">Register</a>
-                    <button class="button button_inverse float_right" onclick="login()">Login</button>
+                    <button class="button button_inverse float_right" type="submit">Login</button>
                 </div>
             </div>
-        </div>
+            <div class="form-element">
+                <a class="text-body_small text-link" onclick="handleForgotPassword()">Forgot your
+                    password?</a>
+            </div>
+        </form>
+        <form id="reset-form" class="form" onsubmit="handleGetResetLink(event)" hidden>
+            <h2 class="form__title">Enter Your Email</h2>
+            <div class="form-element">
+                <label class="form-element__label" for="email">Email</label>
+                <div class="form-element__control">
+                    <input id="email" class="input" type="email" name="email" placeholder="Email" autocomplete="email"
+                        required>
+                </div>
+            </div>
+            <div class="form-element m-top_small">
+                <div class="form-element__control">
+                    <button class="button" type="button" onclick="handleBack()">Back</button>
+                    <button class="button button_inverse float_right" type="submit">Reset Password</button>
+                </div>
+            </div>
+        </form>
     </div>
     <script>
-        const form = document.getElementById('form');
-        /** @type {HTMLInputElement} */
-        const usernameInput = document.getElementById('username');
-        /** @type {HTMLInputElement} */
-        const passwordInput = document.getElementById('password');
-        const errorElement = document.createElement('div');
-        errorElement.classList.add('form__error');
-        function showError(msg) {
-            errorElement.innerHTML = `<span>${msg}</span>`;
-            form.lastChild.after(errorElement);
+        /** @param {HTMLObjectElement} element @param {string} message */
+        function setCustomValidity(element, message) {
+            function clearValidity(event) {
+                element.setCustomValidity("");
+                element.removeEventListener("input", clearValidity);
+            }
+            element.setCustomValidity(message);
+            element.addEventListener("input", clearValidity);
         }
-        async function login() {
+        const errorContainer = document.createElement("div");
+        errorContainer.classList.add("form__error");
+        const errorElement = document.createElement("span");
+        errorContainer.append(errorElement);
+        /** @param {HTMLFormElement} form @param {...string} messages  */
+        function showError(form, ...messages) {
+            if (messages.length === 0) {
+                errorElement.innerText = "Something went wrong.";
+            } else {
+                errorElement.innerHTML = messages.join("<br>");
+            }
+            form.lastChild.after(errorContainer);
+        }
+        /** @param {SubmitEvent} event */
+        async function handleLogin(event) {
+            event.preventDefault();
+            /** @type {HTMLFormElement} */
+            const form = event.currentTarget;
+            /** @type {[HTMLInputElement, HTMLInputElement]} */
+            const [usernameInput, passwordInput] = form.elements;
             const username = usernameInput.value;
             const password = passwordInput.value;
-            if (username && password) {
-                const payload = { username, password };
-                const body = JSON.stringify(payload);
-                const headers = { 'content-type': 'application/json' };
-                const res = await fetch('/api/login', { method: 'POST', headers, body });
-                if (res.ok) {
-                    location.replace('/');
-                } else if (res.status === 401) {
-                    showError('Invalid username and/or password.');
-                } else {
-                    showError('Something went wrong.');
-                }
+            const payload = { username, password };
+            const body = JSON.stringify(payload);
+            const headers = { "content-type": "application/json" };
+            const res = await fetch("/api/login", { method: "POST", headers, body });
+            if (res.ok) {
+                location.replace("/");
+            } else if (res.status === 401) {
+                showError(form, "Invalid username and/or password.");
+            } else if (res.status === 400) {
+                const error = await res.json();
+                showError(form, error.message);
+            } else {
+                showError(form);
             }
+        }
+        const loginForm = document.getElementById("login-form");
+        const resetForm = document.getElementById("reset-form");
+        function handleForgotPassword() {
+            loginForm.hidden = true;
+            resetForm.hidden = false;
+        }
+        const infoContainer = document.createElement("div");
+        infoContainer.classList.add("text-body_small");
+        const infoElement = document.createElement("span");
+        infoContainer.append(infoElement);
+        /** @param {SubmitEvent} event */
+        async function handleGetResetLink(event) {
+            event.preventDefault();
+            /** @type {HTMLFormElement} */
+            const form = event.currentTarget;
+            /** @type {[HTMLInputElement]} */
+            const [emailInput] = form;
+            const email = emailInput.value;
+            const payload = { email };
+            const body = JSON.stringify(payload);
+            const headers = { "content-type": "application/json" };
+            const res = await fetch("/api/forgot-password", { method: "POST", headers, body });
+            if (res.ok) {
+                infoElement.innerText = "Check your email for a link.";
+                form.lastChild.after(infoContainer);
+            } else if (res.status === 404) {
+                setCustomValidity(emailInput, "There is no user with that email.");
+            } else if (res.status === 400) {
+                const error = await res.json();
+                showError(form, error.message);
+            } else {
+                showError(form);
+            }
+            form.reportValidity();
+        }
+        function handleBack() {
+            resetForm.hidden = true;
+            loginForm.hidden = false;
+            infoElement.remove();
         }
     </script>
 </body>

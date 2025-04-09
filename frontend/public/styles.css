@@ -104,6 +104,7 @@ fieldset {
     border-radius: .5rem;
     padding: 2rem;
     width: 20rem;
+    background-color: #fff;
 }
 
 .form__title {
@@ -233,8 +234,21 @@ fieldset {
     justify-content: center;
 }
 
+.text-body_small {
+    font-size: .75rem;
+}
+
+.text-link {
+    color: #0176d3;
+    cursor: pointer;
+}
+
 .align-items_center {
     align-items: center;
+}
+
+.m-top_small {
+    margin-top: 1rem;
 }
 
 .size_1-of-2 {

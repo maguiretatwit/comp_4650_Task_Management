@@ -40,7 +40,9 @@ function taskModelInit(sequelize: Sequelize) {
                 }
             },
             description: {
-                type: DataTypes.TEXT
+                type: DataTypes.TEXT,
+                allowNull: false,
+                defaultValue: ''
             },
             priority: {
                 type: DataTypes.TINYINT,

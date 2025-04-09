@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../models/user';
 import * as security from "../security";
-import { Op } from 'sequelize';
+import { Op, ValidationError } from 'sequelize';
 import { ErrorType } from './utils';
 
 interface CreateUserOptions {
@@ -22,17 +22,20 @@ async function createUser(req: Request<any, any, CreateUserOptions>, res: Respon
             res.status(201).json({ id: user.id, username: user.username, email: user.email });
         } else {
             /* get conflicting fields */
-            const fields = [];
+            const fields = {} as Record<string, string>;
             if (existingUser.username === username) {
-                fields.push('username');
+                fields.username = 'A user with that username already exists.';
             }
             if (existingUser.email === email) {
-                fields.push('email');
+                fields.email = 'A user with that email already exists.';
             }
             /* send 400 Bad Request */
             res.status(400).send({ type: ErrorType.CONFLICT, fields });
         }
     } catch (error) {
+        if (error instanceof ValidationError) {
+            res.status(400).json({ type: ErrorType.VALIDATION_ERROR, message: error.message });
+        }
         next(error);
     }
 }
@@ -62,6 +65,9 @@ async function editUser(req: Request<{ userId: string }, any, Partial<Omit<Creat
             /* send 200 OK */
             res.status(200).json({ id: user.id, username: user.username, email: user.email });
         } catch (error) {
+            if (error instanceof ValidationError) {
+                res.status(400).json({ type: ErrorType.VALIDATION_ERROR, message: error.message });
+            }
             next(error);
         }
     } else {

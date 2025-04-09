@@ -5,11 +5,12 @@ import { existsSync, readFileSync } from 'fs';
 import http from 'http';
 import https from 'https';
 import { sequelize } from './models';
+import { forgotPassword, resetPassword, resetPasswordForm } from './routes/passwords';
 import { login } from './routes/login';
-import { createTask, deleteTask, updateTask, getTask, getTasks } from './routes/tasks';
+import { createTask, deleteTask, getTask, getTasks, updateTask } from './routes/tasks';
 import { createUser, deleteUser, editUser, getUser } from './routes/users';
-import * as security from './security';
 import { hasProperties } from './routes/utils';
+import * as security from './security';
 
 /* create express app */
 const root = './frontend';
@@ -29,7 +30,7 @@ app.get('/', (req, res) => {
     if (session) {
         res.sendFile('home.html', { root });
     } else {
-        res.location('login').status(302).send();
+        res.status(302).location('login').send();
     }
 });
 app.get('/calendar', (req, res) => {
@@ -37,7 +38,7 @@ app.get('/calendar', (req, res) => {
     if (session) {
         res.sendFile('calendar.html', { root });
     } else {
-        res.location('login').status(302).send();
+        res.status(302).location('login').send();
     }
 });
 app.get('/login', (_, res) => {
@@ -56,6 +57,12 @@ app.post('/api/logout', security.unauthorize);
 app.post('/api/logout', (_, res) => {
     res.status(204).send();
 });
+/* password reset endpoints */
+app.get('/reset-password', resetPasswordForm);
+app.post('/api/reset-password', hasProperties({ allOf: ['token', 'password'] }));
+app.post('/api/reset-password', resetPassword);
+app.post('/api/forgot-password', hasProperties({ allOf: ['email'] }));
+app.post('/api/forgot-password', forgotPassword);
 /* user endpoints */
 app.route('/api/users')
     .get(security.denyAll)
