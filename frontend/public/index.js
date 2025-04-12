@@ -412,32 +412,23 @@ function renderCalendar(month, year) {
     day.addEventListener('click', (event) => {
       document.getElementById("cv").style.display = "block";
       document.getElementById("taskBoxCal").style.display = "block"
-      if ((document.getElementById('taskDisplayCal')) != null) {
-        document.getElementById('taskDisplayCal').innerHTML = '';
-        for (let i = 0; i < taskList.length; i++) {
-          if (taskList[i].dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d) {
-            const task = document.createElement('div');
-            task.setAttribute("class", "storage-box list-item")
-            task.style.whiteSpace = "pre-line";
-            task.textContent = taskList[i].name;
-            task.textContent += "\n";
-            task.textContent += taskList[i].dueAt.slice(0, 10);
-            document.getElementById('taskDisplayCal').appendChild(task);
+      const taskDisplay = document.getElementById("taskDisplayCal");
+      if (taskDisplay) {
+        taskDisplay.innerHTML = '';
+        for (const task of taskList) {
+          const date = new Date(task.dueAt);
+          date.setHours(0, 0, 0, 0);
+          const target = new Date(year, m - 1, d);
+          if (date.getTime() == target.getTime()) {
+            const taskElement = createTaskListItemElement(task);
+            taskDisplay.append(taskElement);
           }
         }
       }
       const listItems = document.querySelectorAll(".list-item")
 
       listItems.forEach(listItem => {
-        listItem.addEventListener('click', (event) => {
-          document.getElementById("cv").style.display = "block";
-          document.getElementById("fullTask").style.display = "block"
-          const t = taskList.find(t => t.name === listItem.textContent.slice(0, listItem.textContent.length - 11));
-          document.getElementById("nm").textContent = "Name: " + t.name;
-          document.getElementById("desc").textContent = t.description;
-          document.getElementById("prio").textContent = "Priority: " + t.priority;
-          document.getElementById("dt").textContent = "due on: " + t.dueAt.slice(0, 10) + " " + t.dueAt.slice(11, 16);
-        });
+        listItem.addEventListener('click', handleTaskListItemClick);
       });
     });
 
