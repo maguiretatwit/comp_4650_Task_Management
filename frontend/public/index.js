@@ -1,22 +1,33 @@
-/** @typedef {"UNKNOWN"|"CONFLICT"|"MISSING_PROPERTIES"|"VALIDATION_ERROR"} ErrorType @typedef {{id:number;name:string;description:string|null;priority:number;isComplete:boolean;dueAt:string;userId:number;createdAt:string;updatedAt:string}} Task @typedef {{name:string;description?:string;priority?:number;isComplete?:boolean;dueAt?:string}} CreateTaskOptions @typedef {Partial<CreateTaskOptions>} UpdateTaskOptions */
+/** @typedef {"UNKNOWN"|"CONFLICT"|"MISSING_PROPERTIES"|"VALIDATION_ERROR"} ErrorType @typedef {{id:number;name:string;description:string|null;priority:number;isComplete:boolean;dueAt:string;userId:number;createdAt:string;updatedAt:string}} Task @typedef {{name:string;description?:string;priority?:number;isComplete?:boolean;dueAt?:string}} CreateTaskOptions @typedef {Partial<CreateTaskOptions>} UpdateTaskOptions @typedef {"create"|"update"} TaskFormAction */
+
+/*
+ * --------------
+ * |  REQUESTS  |
+ * --------------
+ */
 
 class RequestError extends Error {
   /** @readonly @type {number} */
   status;
   /** @readonly @type {string} */
   statusText;
+  /** @readonly @type {string|null} */
+  message;
   /** @readonly @type {ErrorType|null} */
   type;
   /** @readonly @type {Record<string,string>|null} */
   fields;
-  /** @param {Response} res @param {{type:ErrorType;fields?:Record<string,string>;}} [body] */
+  /** @param {Response} res @param {{type:ErrorType;message?:string;fields?:Record<string,string>;}} [body] */
   constructor(res, body) {
     super();
     this.status = res.status;
     this.statusText = res.statusText;
-    this.type = this.fields = null;
+    this.message = this.type = this.fields = null;
     if (body) {
       this.type = body.type;
+      if (body.message) {
+        this.message = body.message;
+      }
       if (body.fields) {
         this.fields = body.fields;
       }
@@ -87,6 +98,86 @@ async function deleteTask(taskId) {
   await request(`/api/tasks/${encodeURIComponent(taskId)}`, "DELETE");
 }
 
+/* 
+ * -----------
+ * |  FORMS  |
+ * -----------
+ */
+
+/** @param {HTMLObjectElement} element @param {string} message */
+function setCustomValidity(element, message) {
+  function clearValidity() {
+    element.setCustomValidity("");
+    element.removeEventListener("input", clearValidity);
+  }
+  element.setCustomValidity(message);
+  element.addEventListener("input", clearValidity);
+}
+
+const errorContainer = document.createElement("div");
+errorContainer.classList.add("form__error");
+const errorElement = document.createElement("span");
+errorContainer.append(errorElement);
+/** @param {HTMLFormElement} form @param {...string} messages  */
+function showErrorMessage(form, ...messages) {
+  if (messages.length === 0) {
+    errorElement.innerText = "Something went wrong.";
+  } else {
+    errorElement.innerHTML = messages.join("<br>");
+  }
+  form.lastChild.after(errorContainer);
+}
+
+/** @param {HTMLFormElement} form @param {RequestError} error */
+function showError(form, error) {
+  if (error.status === 400) {
+    if (error.type === "CONFLICT") {
+      const fields = error.fields;
+      for (const field in fields) {
+        if (field in form) {
+          setCustomValidity(form[field], fields[field]);
+        }
+      }
+    } else {
+      showErrorMessage(form, error.message);
+    }
+  } else {
+    showErrorMessage(form);
+  }
+}
+
+/** @param {SubmitEvent} event */
+async function handleSubmitTask(event) {
+  event.preventDefault();
+  /** @type {HTMLFormElement} */
+  const form = event.currentTarget;
+  /** @type {[HTMLInputElement,HTMLInputElement,HTMLSelectElement,HTMLFieldSetElement,HTMLInputElement,HTMLInputElement]} */
+  const [nameInput, descriptionInput, priorityInput, _dueAtElement, dueDateInput, dueTimeInput] = form.elements;
+  const name = nameInput.value;
+  const description = descriptionInput.value || undefined;
+  const priority = priorityInput.value;
+  const dueDate = dueDateInput.value;
+  const dueTime = dueTimeInput.value;
+  const dueAt = new Date(`${dueDate.replaceAll("-", "/")} ${dueTime}`);
+  const options = { name, description, priority, dueAt };
+  try {
+    /** @type {{action:TaskFormAction;taskId:string}} */
+    const { action, taskId } = form.dataset;
+    switch (action) {
+      case "create":
+        await createTask(options);
+        break;
+      case "update":
+        await updateTask(taskId, options);
+        break;
+    }
+    await refreshTasks();
+    closeTaskForm();
+  } catch (error) {
+    showError(form, error);
+  }
+}
+
 let taskList = [];
 async function refreshTasks() {
   taskList = await getTasks();
@@ -94,97 +185,61 @@ async function refreshTasks() {
 }
 refreshTasks();
 
-
-
 async function handleLogout() {
   await logout();
   location.replace('/login');
 }
 
 async function handleDeleteTask() {
-  const name = document.getElementById("nm");
-  const t = taskList.find(t => t.name === name.textContent.slice(6, name.textContent.length));
-  const id = t.id
-  await deleteTask(id);
+  const taskElement = document.getElementById("fullTask");
+  await deleteTask(taskElement.dataset.id);
+  await refreshTasks();
   closeOpenTask();
-  refreshTasks();
 }
 
-
-function openTask() {
-  document.getElementById("task-form").style.display = "block";
-  document.getElementById("open_task").style.display = "none";
-  document.getElementById("close_task").style.display = "block";
-  document.getElementById("cv").style.display = "block";
+/** @param {TaskFormAction} action */
+function openTaskForm(action) {
+  const taskForm = document.getElementById("task-form");
+  taskForm.dataset.action = action;
+  taskForm.classList.remove("hide");
+  document.getElementById("cover").classList.remove("hide");
 }
 
-function closeTask() {
-  document.getElementById("task-form").style.display = "none";
-  document.getElementById("close_task").style.display = "none";
-  document.getElementById("open_task").style.display = "block";
-  document.getElementById("cv").style.display = "none";
-
-
-
+function closeTaskForm() {
+  document.getElementById("task-form").classList.add("hide");
+  document.getElementById("cover").classList.add("hide");
+  errorContainer.remove();
 }
+
 function closeTaskList() {
-  document.getElementById("cv").style.display = "none";
-  document.getElementById("taskBoxCal").style.display = "none";
+  document.getElementById("cover").classList.add("hide");
+  document.getElementById("taskBoxCal").classList.add("hide");
 
 }
 
 function closeOpenTask() {
-  document.getElementById("cv").style.display = "none";
-  document.getElementById("fullTask").style.display = "none";
+  document.getElementById("cover").classList.add("hide");
+  document.getElementById("fullTask").classList.add("hide");
 
 }
 function closeOpenTaskCal() {
-  document.getElementById("fullTask").style.display = "none";
+  document.getElementById("fullTask").classList.add("hide");
 
 }
 
-async function createTask(options) {
-  const name = options.name;
-  const description = options.description;
-  const priority = options.priority;
-
-  const dueAt = options.dueAt;
-  if (name && dueAt && description && priority) {
-    const payload = { name, description, priority, dueAt };
-    const body = JSON.stringify(payload);
-    const headers = { 'content-type': 'application/json' };
-    const res = await fetch('/api/tasks', { method: 'POST', headers, body });
-    if (res.ok) {
-      start();
-      return true;
-
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-
-}
-
-async function saveTaskForm() {
-  const name = document.getElementById("task-name").value;
-  const description = document.getElementById("task-description").value;
-  const priority = document.getElementById("task-priority").value;
-  const dueDate = document.getElementById("task-due-date").value;
-  const dueTime = document.getElementById("task-due-time").value;
-  const dueAt = new Date(parseInt(dueDate.slice(0, 5)), parseInt(dueDate.slice(6, 8)), parseInt(dueDate.slice(9, 11)), parseInt(dueTime.slice(0, 3)), parseInt(dueTime.slice(4, 6)));
-  const task = { name, description, priority, dueAt };
-  await createTask(task);
-  await refreshTasks();
-  closeTask();
-}
+/* 
+ * -----------
+ * |  TASKS  |
+ * -----------
+ */
 
 /** @param {string} taskId */
 function showTaskOptions(taskId) {
-  const task = taskList.find(t => t.id === taskId);
-  document.getElementById("cv").style.display = "block";
-  document.getElementById("fullTask").style.display = "block"
+  const task = taskList.find(t => t.id.toString() === taskId);
+  document.getElementById("cover").classList.remove("hide");
+  const taskElement = document.getElementById("fullTask");
+  taskElement.dataset.id = taskId;
+  taskElement.classList.remove("hide");
   document.getElementById("nm").innerText = "Name: " + task.name;
   document.getElementById("desc").innerText = "Description:" + task.description;
   document.getElementById("prio").innerText = "Priority: " + task.priority;
@@ -196,7 +251,7 @@ function showTaskOptions(taskId) {
 function handleTaskListItemClick(event) {
   /** @type {HTMLDivElement} */
   const taskElement = event.currentTarget;
-  showTaskOptions(Number(taskElement.dataset.id));
+  showTaskOptions(taskElement.dataset.id);
 }
 
 
@@ -239,7 +294,7 @@ function setTasks(tasks) {
 /*
 calendarDates.addEventListener('click', (e) => {
   if (e.target.textContent !== '') {
-    document.getElementById("taskDisplayCalender").style.display = "block"
+    document.getElementById("taskDisplayCalender").classList.remove("hide")
     cList = document.createElement('ul');
     document.getElementById("taskDisplayCalender").appendChild(cList);
     cList.replaceChildren();
@@ -362,17 +417,14 @@ function renderCalendar(month, year) {
     let found = 1;
 
     found = taskList.find(({ dueAt }) => dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d);
-    //console.log(tasks[0].dueAt.toString().slice(0,10));
-    //console.log(year+"-"+m+"-"+d);
-    //console.log(found);
     if (found != undefined) {
       //console.log("test");
       day.style.backgroundColor = "#c67171";
     }
     calendarDates.appendChild(day);
-    day.addEventListener('click', (event) => {
-      document.getElementById("cv").style.display = "block";
-      document.getElementById("taskBoxCal").style.display = "block"
+    day.addEventListener("click", () => {
+      document.getElementById("cover").classList.remove("hide");
+      document.getElementById("taskBoxCal").classList.remove("hide")
       const taskDisplay = document.getElementById("taskDisplayCal");
       if (taskDisplay) {
         taskDisplay.innerHTML = '';
@@ -386,11 +438,6 @@ function renderCalendar(month, year) {
           }
         }
       }
-      const listItems = document.querySelectorAll(".list-item")
-
-      listItems.forEach(listItem => {
-        listItem.addEventListener('click', handleTaskListItemClick);
-      });
     });
 
   }

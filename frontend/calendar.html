@@ -29,10 +29,20 @@
             </div>
         </header>
         <div class="page-content">
-            <div class="cover" id="cv" style="width: 100%;">
-
+            <div class="cover hide" id="cover"></div>
+            <div class="taskBox overlay hide" id="taskBoxCal">
+                <div style="height: 90%">
+                    <div class="taskDisplay" id="taskDisplayCal"></div>
+                </div>
+                <button class="button button_inverse" id="closeTaskList" onclick="closeTaskList()">Close</button>
             </div>
-
+            <div id="fullTask" class="taskBox overlay hide">
+                <div id="nm">Name:</div>
+                <div id="desc">Description:</div>
+                <div id="prio">Priority:</div>
+                <div id="dt">Date:</div>
+                <button class="button button_inverse" onclick="closeOpenTaskCal()">Close</button>
+            </div>
             <div class="row-container">
                 <div class="storage-box calender" id="calender">
                     <div class="calendarm">
@@ -54,31 +64,6 @@
                             <div class="calendar-dates">
                             </div>
                         </div>
-                    </div>
-                    <div class="taskBox" id="taskBoxCal">
-                        <div style="height: 90%">
-                            <div class="taskDisplay" id="taskDisplayCal">
-
-
-                            </div>
-                        </div>
-                        <button class="button button_inverse" id="closeTaskList"
-                            onclick="closeTaskList()">Close</button>
-                    </div>
-
-
-
-
-                    <div id="fullTask" class="taskBox" style="display: none;">
-                        <div id="nm">Name:</div>
-                        <bp></bp>
-                        <div id="desc">Description:</div>
-                        <bp></bp>
-                        <div id="prio">Priority:</div>
-                        <bp></bp>
-                        <div id="dt">Date:</div>
-                        <bp></bp>
-                        <button class="button button_inverse" onclick="closeOpenTaskCal()">Close</button>
                     </div>
                 </div>
             </div>

@@ -302,12 +302,10 @@ fieldset {
 }
 
 .fb2 {
-    min-width: 10%;
+    min-width: 8rem;
 }
 
 .fb {
-
-
     height: auto;
     margin: 10%;
 }
@@ -322,49 +320,45 @@ fieldset {
 
 
 .list {
-    
-    min-width: 90%;
+    min-width: calc(100% - 8rem);
+}
+
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 25rem;
+    transform: translate(-50%, -50%);
+    z-index: 200;
 }
 
 .tform {
-    position: fixed;
-    top: 40%;
-    left: 25%;
-    width: 80%;
-    transform: translate(-25%, -25%);
-    FONT-WEIGHT: 500;
-    right: 25%;
-    z-index: 2;
-    background: linear-gradient(#eee, #fff, #eee);
+    background-color: #fff;
+    padding: 1rem;
+    border: 1px solid #000;
+    border-radius: .25rem;
+    min-width: 30rem;
 }
 
-.taskBox{
-    position: fixed;
-    top: 40%;
-    left: 25%;
-    width: 80%;
-    transform: translate(-25%, -25%);
-    right: 25%;
-    z-index: 2;
+.taskBox {
     background-color: #fff;
     padding: 1rem;
     border: 1px solid #000;
     border-radius: .25rem;
 }
+
 #taskBoxCal{
-    display: none;
     height: 40%;
 }
 
 
 .cover {
-    width: 90%;
+    width: 100%;
     height: 100%;
     background-color: gray;
-    opacity: 20%;
+    opacity: 50%;
     position: fixed;
     z-index: 1;
-
 }
 
 #cv {
@@ -374,7 +368,6 @@ fieldset {
 .tab {
     display: flex;
     flex: row;
-
 }
 
 .th {
@@ -450,8 +443,6 @@ fieldset {
     
 }
 
-.fixed {
-    position: fixed;
-    top: 3px;
-    right: 3px;
+.hide {
+    display: none;
 }

@@ -29,116 +29,99 @@
             </div>
         </header>
         <div class="page-content">
-            <div class="storage-box list" id="li">
-                
-                <div class="cover" id="cv">
-                    
-                </div>
-                <div class="taskDisplay" id="taskDisplayList">
-                </div>
-
-
-
-                <!-- List -->
-                <div id="fullTask" class="taskBox" style="display: none;">
-                    <div id="nm">Name:</div>
-                    <div id="desc">Description:</div>
-                    <div id="prio">Priority:</div>
-                    <div id="dt">Date:</div>
-                    <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
-                    <button class="button button_inverse" onclick="handleDeleteTask()">Delete</button>
-                    <button class="button button_inverse" onclick="editTask()">Edit</button>
-                    <button class="button button_inverse" onclick="deleteTask()">Complete</button>
-
-                </div>
-                <!-- New Task Form -->
-                <div id="task-form" class="form tform" style="display: none;">
-                    <!-- Name -->
-                    <div class="form-element">
-                        <label class="form-element__label" for="task-name">Name</label>
-                        <div class="form-element__control">
-                            <input id="task-name" class="input" placeholder="Name">
-                        </div>
+            <div class="cover hide" id="cover">
+            </div>
+            <div id="fullTask" class="taskBox overlay hide">
+                <div id="nm">Name:</div>
+                <div id="desc">Description:</div>
+                <div id="prio">Priority:</div>
+                <div id="dt">Date:</div>
+                <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
+                <button class="button button_inverse" onclick="handleDeleteTask()">Delete</button>
+                <button class="button button_inverse" onclick="editTask()">Edit</button>
+                <button class="button button_inverse" onclick="deleteTask()">Complete</button>
+            </div>
+            <!-- New Task Form -->
+            <form autocomplete="off" class="form tform overlay hide" id="task-form" onsubmit="handleSubmitTask(event)">
+                <!-- Name -->
+                <div class="form-element">
+                    <label class="form-element__label" for="task-name">Name</label>
+                    <div class="form-element__control">
+                        <input id="task-name" name="name" required class="input" placeholder="Name">
                     </div>
-                    <!-- Description -->
-                    <div class="form-element">
-                        <label class="form-element__label" for="task-description">Description</label>
-                        <div class="form-element__control">
-                            <textarea id="task-description" class="textarea" placeholder="Description"></textarea>
-                        </div>
+                </div>
+                <!-- Description -->
+                <div class="form-element">
+                    <label class="form-element__label" for="task-description">Description</label>
+                    <div class="form-element__control">
+                        <textarea name="description" placeholder="Description" class="textarea"></textarea>
                     </div>
-                    <!-- Priority -->
-                    <div class="form-element">
-                        <label class="form-element__label" for="task-priority">Priority</label>
-                        <div class="form-element__control">
-                            <select id="task-priority" class="input" placeholder="Priority">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                            </select>
-                        </div>
+                </div>
+                <!-- Priority -->
+                <div class="form-element">
+                    <label class="form-element__label" for="task-priority">Priority</label>
+                    <div class="form-element__control">
+                        <select id="task-priority" name="priority" placeholder="Priority" required class="input">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                        </select>
                     </div>
-                    <!-- Due Date/Time -->
-                    <fieldset class="form-element">
-                        <legend class="form-element__legend form-element__label">Due Date</legend>
-                        <div class="form-element__control">
-                            <div class="form-element__row">
-                                <div class="form-element size_1-of-2">
-                                    <label class="form-element__label" for="task-due-date">Date</label>
-                                    <div class="form-element__control">
-                                        <input id="task-due-date" class="input" type="date" placeholder="Date">
-                                    </div>
+                </div>
+                <!-- Due Date -->
+                <fieldset name="dueAt" class="form-element">
+                    <legend class="form-element__legend form-element__label">Due Date</legend>
+                    <div class="form-element__control">
+                        <div class="form-element__row">
+                            <!-- Date -->
+                            <div class="form-element size_1-of-2">
+                                <label class="form-element__label" for="task-due-date">Date</label>
+                                <div class="form-element__control">
+                                    <input id="task-due-date" name="dueDate" required class="input" type="date" placeholder="Date">
                                 </div>
-                                <div class="form-element size_1-of-2">
-                                    <label class="form-element__label" for="task-due-time">Time</label>
-                                    <div class="form-element__control">
-                                        <input id="task-due-time" class="input" type="time" placeholder="Time">
-                                    </div>
+                            </div>
+                            <!-- Time -->
+                            <div class="form-element size_1-of-2">
+                                <label class="form-element__label" for="task-due-time">Time</label>
+                                <div class="form-element__control">
+                                    <input id="task-due-time" name="dueTime" required class="input" type="time" placeholder="Time">
                                 </div>
                             </div>
                         </div>
-                    </fieldset>
-                    <!-- Submit Button -->
-                    <div class="form-element form-element_controls">
-                        <div class="form-element__control clearfix">
-                            <button class="button button_inverse float_right" onclick="saveTaskForm()">Submit</button>
-                        </div>
+                    </div>
+                </fieldset>
+                <!-- Submit Button -->
+                <div class="form-element m-top_small">
+                    <div class="form-element__control">
+                        <button type="button" class="button" onclick="closeTaskForm()">Close</button>
+                        <button type="submit" class="button button_inverse float_right">Submit</button>
                     </div>
                 </div>
-
+            </form>
+            <div class="storage-box list" id="li">
+                <!-- List -->
+                <div class="taskDisplay" id="taskDisplayList">
+                </div>
             </div>
             <div class="storage-box fb2">
                 <div class="foot">
                     <div class="ft"> Add Task</div>
-                    <button class="button button_inverse fb" id="close_task" name="New Task" onclick="closeTask()"
-                        style="display: none;">+</button>
-                    <button class="button button_inverse fb" id="open_task" name="New Task" onclick="openTask()"
-                        style="display: block;">+</button>
+                    <button name="New Task" class="button button_inverse fb" id="open_task" onclick="openTaskForm('create')">+</button>
                     <div class="ft">Sort By</div>
                     <button class="button button_inverse fb" onclick="sortTaskList('dueDate')">Due-Date</button>
                     <button class="button button_inverse fb" onclick="sortTaskList('priority')">Priority</button>
-
                 </div>
             </div>
         </div>
-
-
-
-
     </section>
     <script src="index.js"></script>
-
-
-
-
-    <div style="all: initial;" class="quick-apply-extension-root"></div>
 </body>
 
 </html>
