@@ -203,6 +203,38 @@ function openTaskForm(action) {
   taskForm.dataset.action = action;
   taskForm.classList.remove("hide");
   document.getElementById("cover").classList.remove("hide");
+  refreshTasks();
+}
+async function handleEditTask() {
+  openTask();
+  const name = document.getElementById("nm");
+  const t = taskList.find(t => t.name === name.textContent.slice(6, name.textContent.length));
+  const id = t.id  
+  document.getElementById("task-name").value=t.name;
+  document.getElementById("task-description").value= t.description
+  document.getElementById("task-priority").value=t.priority;
+  const dueAt=new Date(t.dueAt);
+  document.getElementById("task-due-date").value= `${dueAt.getFullYear()}-${(dueAt.getMonth()+1).toString().padStart(2,"0")}-${dueAt.getDate().toString().padStart(2,"0")}`;
+  document.getElementById("task-due-time").value=`${dueAt.getHours().toString().padStart(2,"0")}:${dueAt.getMinutes().toString().padStart(2,"0")}`;
+  document.getElementById("editButton").style.display="block"
+  document.getElementById("submitButton").style.display="none"
+  
+
+}
+
+
+
+function openTask() {
+  document.getElementById("task-form").style.display = "block";
+  document.getElementById("open_task").style.display = "none";
+  document.getElementById("close_task").style.display = "block";
+  document.getElementById("cv").style.display = "block";
+  document.getElementById("editButton").style.display="none"
+  document.getElementById("task-name").value="";
+  document.getElementById("task-description").value=""
+  document.getElementById("task-priority").value="1";
+  document.getElementById("task-due-date").value= "";
+  document.getElementById("task-due-time").value= "";
 }
 
 function closeTaskForm() {
