@@ -28,6 +28,7 @@ async function deleteTask() {
   closeOpenTask();
   start();
 }
+
 function openTask() {
   document.getElementById("task-form").style.display = "block";
   document.getElementById("open_task").style.display = "none";
