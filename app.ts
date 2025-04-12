@@ -1,12 +1,13 @@
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import { existsSync, readFileSync } from 'fs';
 import http from 'http';
 import https from 'https';
 import { sequelize } from './models';
-import { forgotPassword, resetPassword, resetPasswordForm } from './routes/passwords';
 import { login } from './routes/login';
+import { forgotPassword, resetPassword, resetPasswordForm } from './routes/passwords';
 import { createTask, deleteTask, getTask, getTasks, updateTask } from './routes/tasks';
 import { createUser, deleteUser, editUser, getUser } from './routes/users';
 import { hasProperties } from './routes/utils';
@@ -19,6 +20,7 @@ const app = express();
 
 /* configure express */
 app.disable('x-powered-by');
+app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

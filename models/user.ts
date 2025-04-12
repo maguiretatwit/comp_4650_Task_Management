@@ -39,14 +39,14 @@ function userModelInit(sequelize: Sequelize) {
             username: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
+                unique: 'username',
                 validate: {
                     notEmpty: true
                 },
             },
             email: {
                 type: DataTypes.STRING,
-                unique: true,
+                unique: 'email',
                 allowNull: false,
                 validate: {
                     isEmail: true
