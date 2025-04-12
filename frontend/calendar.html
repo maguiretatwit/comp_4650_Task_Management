@@ -20,7 +20,7 @@
                         <li class="global-header__navigation-item">
                             <a class="global-header__navigation-link" href="/calendar">Calendar</a>
                         </li>
-                        
+
                         <li class="global-header__navigation-item">
                             <button class="button button_inverse" onclick="logout()">Logout</button>
                         </li>
@@ -29,44 +29,56 @@
             </div>
         </header>
         <div class="page-content">
-            
+            <div class="cover" id="cv" style="width: 100%;">
+
+            </div>
+
             <div class="row-container">
-                    <div class="storage-box calender" id="calender">
-                        <div class="calendarm">
-                            <div class="calendar-header">
-                                <button id="prev-month">‹</button>
-                                <div id="month-year"></div>
-                                <button id="next-month">›</button>
+                <div class="storage-box calender" id="calender">
+                    <div class="calendarm">
+                        <div class="calendar-header">
+                            <button id="prev-month">‹</button>
+                            <div id="month-year"></div>
+                            <button id="next-month">›</button>
+                        </div>
+                        <div class="calendar-body">
+                            <div class="calendar-weekdays">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
                             </div>
-                            <div class="calendar-body">
-                                <div class="calendar-weekdays">
-                                    <div>Sun</div>
-                                    <div>Mon</div>
-                                    <div>Tue</div>
-                                    <div>Wed</div>
-                                    <div>Thu</div>
-                                    <div>Fri</div>
-                                    <div>Sat</div>
-                                </div>
-                                <div class="calendar-dates">
-                                </div>
+                            <div class="calendar-dates">
                             </div>
                         </div>
-                        <div class="taskDisplay" id="taskDisplayCal">
-                            <button class="button button_inverse" onclick="closeOpenList()">Close</button>
+                    </div>
+                    <div class="taskBox" id="taskBoxCal">
+                        <div style="height: 90%">
+                            <div class="taskDisplay" id="taskDisplayCal">
 
 
+                            </div>
                         </div>
-                        <div id="fullTask" class="taskBox" style="display: none;">
-                            <div id="nm">Name:</div>
-                            <bp></bp>
-                            <div id="desc">Description:</div>
-                            <bp></bp>
-                            <div id="prio">Priority:</div>
-                            <bp></bp>
-                            <div id="dt">Date:</div>
-                            <bp></bp>
-                            <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
+                        <button class="button button_inverse" id="closeTaskList"
+                            onclick="closeTaskList()">Close</button>
+                    </div>
+
+
+
+
+                    <div id="fullTask" class="taskBox" style="display: none;">
+                        <div id="nm">Name:</div>
+                        <bp></bp>
+                        <div id="desc">Description:</div>
+                        <bp></bp>
+                        <div id="prio">Priority:</div>
+                        <bp></bp>
+                        <div id="dt">Date:</div>
+                        <bp></bp>
+                        <button class="button button_inverse" onclick="closeOpenTaskCal()">Close</button>
                     </div>
                 </div>
             </div>

@@ -110,6 +110,7 @@ async function handleDeleteTask() {
   refreshTasks();
 }
 
+
 function openTask() {
   document.getElementById("task-form").style.display = "block";
   document.getElementById("open_task").style.display = "none";
@@ -128,13 +129,41 @@ function closeTask() {
 }
 function closeTaskList() {
   document.getElementById("cv").style.display = "none";
-  document.getElementById("taskDisplayCal").style.display = "none";
+  document.getElementById("taskBoxCal").style.display = "none";
 
 }
 
 function closeOpenTask() {
   document.getElementById("cv").style.display = "none";
   document.getElementById("fullTask").style.display = "none";
+
+}
+function closeOpenTaskCal() {
+  document.getElementById("fullTask").style.display = "none";
+
+}
+
+async function createTask(options) {
+  const name = options.name;
+  const description = options.description;
+  const priority = options.priority;
+
+  const dueAt = options.dueAt;
+  if (name && dueAt && description && priority) {
+    const payload = { name, description, priority, dueAt };
+    const body = JSON.stringify(payload);
+    const headers = { 'content-type': 'application/json' };
+    const res = await fetch('/api/tasks', { method: 'POST', headers, body });
+    if (res.ok) {
+      start();
+      return true;
+
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
 
 }
 
@@ -343,7 +372,7 @@ function renderCalendar(month, year) {
     calendarDates.appendChild(day);
     day.addEventListener('click', (event) => {
       document.getElementById("cv").style.display = "block";
-      document.getElementById("taskDisplayCaa").style.display = "block"
+      document.getElementById("taskBoxCal").style.display = "block"
       if ((document.getElementById('taskDisplayCal')) != null) {
         document.getElementById('taskDisplayCal').innerHTML = '';
         for (let i = 0; i < taskList.length; i++) {
