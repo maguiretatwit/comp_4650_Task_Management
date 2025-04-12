@@ -44,6 +44,12 @@ function closeTask() {
 
 
 }
+function closeTaskList() {
+  document.getElementById("cv").style.display = "none";
+  document.getElementById("taskDisplayCal").style.display = "none";
+
+}
+
 function closeOpenTask() {
   document.getElementById("cv").style.display = "none";
   document.getElementById("fullTask").style.display = "none";
