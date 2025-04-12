@@ -47,8 +47,8 @@
                     <div id="dt">Date:</div>
                     <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
                     <button class="button button_inverse" onclick="handleDeleteTask()">Delete</button>
-                    <button class="button button_inverse" onclick="editTask()">Edit</button>
-                    <button class="button button_inverse" onclick="deleteTask()">Complete</button>
+                    <button class="button button_inverse" onclick="handleEditTask()">Edit</button>
+                    <button class="button button_inverse" onclick="handleDeleteTask()">Complete</button>
 
                 </div>
                 <!-- New Task Form -->
@@ -108,8 +108,11 @@
                     <!-- Submit Button -->
                     <div class="form-element form-element_controls">
                         <div class="form-element__control clearfix">
-                            <button class="button button_inverse float_right" onclick="saveTaskForm()">Submit</button>
+                            <button class="button button_inverse float_right" id="editButton" onclick="editTaskForm()">Submit</button>
+                            <button class="button button_inverse float_right" id="submitButton" onclick="saveTaskForm()">Submit</button>
+
                         </div>
+                        
                     </div>
                 </div>
 
@@ -134,10 +137,6 @@
 
     </section>
     <script src="index.js"></script>
-
-
-
-
     <div style="all: initial;" class="quick-apply-extension-root"></div>
 </body>
 

@@ -109,6 +109,23 @@ async function handleDeleteTask() {
   closeOpenTask();
   refreshTasks();
 }
+async function handleEditTask() {
+  openTask();
+  const name = document.getElementById("nm");
+  const t = taskList.find(t => t.name === name.textContent.slice(6, name.textContent.length));
+  const id = t.id  
+  document.getElementById("task-name").value=t.name;
+  document.getElementById("task-description").value= t.description
+  document.getElementById("task-priority").value=t.priority;
+  const dueAt=new Date(t.dueAt);
+  document.getElementById("task-due-date").value= `${dueAt.getFullYear()}-${(dueAt.getMonth()+1).toString().padStart(2,"0")}-${dueAt.getDate().toString().padStart(2,"0")}`;
+  document.getElementById("task-due-time").value=`${dueAt.getHours().toString().padStart(2,"0")}:${dueAt.getMinutes().toString().padStart(2,"0")}`;
+  document.getElementById("editButton").style.display="block"
+  document.getElementById("submitButton").style.display="none"
+  
+
+}
+
 
 
 function openTask() {
@@ -116,6 +133,12 @@ function openTask() {
   document.getElementById("open_task").style.display = "none";
   document.getElementById("close_task").style.display = "block";
   document.getElementById("cv").style.display = "block";
+  document.getElementById("editButton").style.display="none"
+  document.getElementById("task-name").value="";
+  document.getElementById("task-description").value=""
+  document.getElementById("task-priority").value="1";
+  document.getElementById("task-due-date").value= "";
+  document.getElementById("task-due-time").value= "";
 }
 
 function closeTask() {
@@ -155,7 +178,7 @@ async function createTask(options) {
     const headers = { 'content-type': 'application/json' };
     const res = await fetch('/api/tasks', { method: 'POST', headers, body });
     if (res.ok) {
-      start();
+      refreshTasks();
       return true;
 
     } else {
@@ -173,11 +196,27 @@ async function saveTaskForm() {
   const priority = document.getElementById("task-priority").value;
   const dueDate = document.getElementById("task-due-date").value;
   const dueTime = document.getElementById("task-due-time").value;
-  const dueAt = new Date(parseInt(dueDate.slice(0, 5)), parseInt(dueDate.slice(6, 8)), parseInt(dueDate.slice(9, 11)), parseInt(dueTime.slice(0, 3)), parseInt(dueTime.slice(4, 6)));
+  const dueAt = new Date(`${dueDate}T${dueTime}Z`);
   const task = { name, description, priority, dueAt };
   await createTask(task);
   await refreshTasks();
   closeTask();
+}
+
+async function editTaskForm() {
+  const name = document.getElementById("task-name").value;
+  const description = document.getElementById("task-description").value;
+  const priority = document.getElementById("task-priority").value;
+  const dueDate = document.getElementById("task-due-date").value;
+  const dueTime = document.getElementById("task-due-time").value;
+  const dueAt = new Date(`${dueDate.replaceAll("-", "/")} ${dueTime}`);
+  const task = { name, description, priority, dueAt };
+  const nm = document.getElementById("nm");
+  const t = taskList.find(t => t.name === nm.textContent.slice(6, nm.textContent.length));
+  await updateTask(t.id,task);
+  await refreshTasks();
+  closeTask();
+  closeOpenTask();
 }
 
 /** @param {string} taskId */
@@ -408,7 +447,7 @@ function renderCalendar(month, year) {
 
 }
 async function calStart() {
-  await getAllTasks();
+  await refreshTasks();
   renderCalendar(currentMonth, currentYear);
 }
 calStart();
