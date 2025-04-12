@@ -1,40 +1,122 @@
-//const { response } = require("express");
+/** @typedef {"UNKNOWN"|"CONFLICT"|"MISSING_PROPERTIES"|"VALIDATION_ERROR"} ErrorType @typedef {{id:number;name:string;description:string|null;priority:number;isComplete:boolean;dueAt:string;userId:number;createdAt:string;updatedAt:string}} Task @typedef {{name:string;description?:string;priority?:number;isComplete?:boolean;dueAt?:string}} CreateTaskOptions @typedef {Partial<CreateTaskOptions>} UpdateTaskOptions */
 
-let tasks = [];
-async function getAllTasks() {
-  const headers = { 'content-type': 'application/json' };
-  const res = await fetch('/api/tasks', { method: 'GET' });
-  tasks = await res.json();
-
+class RequestError extends Error {
+  /** @readonly @type {number} */
+  status;
+  /** @readonly @type {string} */
+  statusText;
+  /** @readonly @type {ErrorType|null} */
+  type;
+  /** @readonly @type {Record<string,string>|null} */
+  fields;
+  /** @param {Response} res @param {{type:ErrorType;fields?:Record<string,string>;}} [body] */
+  constructor(res, body) {
+    super();
+    this.status = res.status;
+    this.statusText = res.statusText;
+    this.type = this.fields = null;
+    if (body) {
+      this.type = body.type;
+      if (body.fields) {
+        this.fields = body.fields;
+      }
+    }
+  }
 }
-async function start() {
-  await getAllTasks();
-  setTasks();
+
+/** @param {string} endpoint @param {string} [method] @param {Record<string,any>} [payload] @throws {RequestError} */
+async function request(endpoint, method, payload) {
+  /** @type {RequestInit} */
+  const init = {};
+  if (method) {
+    init.method = method;
+  }
+  if (payload) {
+    init.headers = {
+      "content-type": "application/json"
+    };
+    init.body = JSON.stringify(payload);
+  }
+  const res = await fetch(endpoint, init);
+  if (res.ok) {
+    return res;
+  } else {
+    const args = [res];
+    if (res.status === 400) {
+      args.push(await res.json());
+    }
+    throw new RequestError(...args);
+  }
 }
-start();
 
-
+/** @param {string} username @param {string} password */
+async function login(username, password) {
+  await request("/api/login", "POST", { username, password });
+}
 
 async function logout() {
-  await fetch('/api/logout', { method: 'POST' });
+  await request("/api/logout", "POST");
+}
+
+/** @returns {Promise<Task[]>} */
+async function getTasks() {
+  const res = await request("/api/tasks");
+  return await res.json();
+}
+
+/** @param {CreateTaskOptions} options @returns {Promise<Task>} */
+async function createTask(options) {
+  const res = await request("/api/tasks", "POST", options);
+  return await res.json();
+}
+
+/** @param {string} taskId @returns {Promise<Task>} */
+async function getTask(taskId) {
+  const res = await request(`/api/${encodeURIComponent(taskId)}`);
+  return await res.json();
+}
+
+/** @param {string} taskId @param {UpdateTaskOptions} options @returns {Promise<Task>} */
+async function updateTask(taskId, options) {
+  const res = await request(`/api/tasks/${encodeURIComponent(taskId)}`, "PATCH", options);
+  return await res.json();
+}
+
+/** @param {string} taskId */
+async function deleteTask(taskId) {
+  await request(`/api/tasks/${encodeURIComponent(taskId)}`, "DELETE");
+}
+
+let taskList = [];
+async function refreshTasks() {
+  taskList = await getTasks();
+  setTasks(taskList);
+}
+refreshTasks();
+
+
+
+async function handleLogout() {
+  await logout();
   location.replace('/login');
 }
-async function deleteTask() {
+
+async function handleDeleteTask() {
   const name = document.getElementById("nm");
-  const t = tasks.find(t => t.name === name.textContent.slice(6, name.textContent.length));
+  const t = taskList.find(t => t.name === name.textContent.slice(6, name.textContent.length));
   const id = t.id
-  const headers = { 'content-type': 'application/json' };
-  await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+  await deleteTask(id);
   closeOpenTask();
-  start();
+  refreshTasks();
 }
+
 function openTask() {
   document.getElementById("task-form").style.display = "block";
   document.getElementById("open_task").style.display = "none";
   document.getElementById("close_task").style.display = "block";
   document.getElementById("cv").style.display = "block";
-
 }
+
 function closeTask() {
   document.getElementById("task-form").style.display = "none";
   document.getElementById("close_task").style.display = "none";
@@ -56,78 +138,74 @@ function closeOpenTask() {
 
 }
 
-async function createTask(options) {
-  const name = options.name;
-  const description = options.description;
-  const priority = options.priority;
-
-  const dueAt = options.dueAt;
-  if (name && dueAt && description && priority) {
-    const payload = { name, description, priority, dueAt };
-    const body = JSON.stringify(payload);
-    const headers = { 'content-type': 'application/json' };
-    const res = await fetch('/api/tasks', { method: 'POST', headers, body });
-    if (res.ok) {
-      start();
-      return true;
-
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-
-}
-
 async function saveTaskForm() {
-  const n = document.getElementById("task-name").value;
-  const d = document.getElementById("task-description").value;
-  const p = document.getElementById("task-priority").value;
+  const name = document.getElementById("task-name").value;
+  const description = document.getElementById("task-description").value;
+  const priority = document.getElementById("task-priority").value;
   const dueDate = document.getElementById("task-due-date").value;
   const dueTime = document.getElementById("task-due-time").value;
-  //ueDate.slice(0,5),dueDate.slice(6,8),dueDate.slice(9,11),dueTime.slice(0,3),dueTime.slice(4,6)
-  const due = new Date(parseInt(dueDate.slice(0, 5)), parseInt(dueDate.slice(6, 8)), parseInt(dueDate.slice(9, 11)), parseInt(dueTime.slice(0, 3)), parseInt(dueTime.slice(4, 6)));
-  const task = { name: n, description: d, priority: p, dueAt: due };
-  createTask(task);
-  setTasks();
+  const dueAt = new Date(parseInt(dueDate.slice(0, 5)), parseInt(dueDate.slice(6, 8)), parseInt(dueDate.slice(9, 11)), parseInt(dueTime.slice(0, 3)), parseInt(dueTime.slice(4, 6)));
+  const task = { name, description, priority, dueAt };
+  await createTask(task);
+  await refreshTasks();
   closeTask();
 }
 
+/** @param {string} taskId */
+function showTaskOptions(taskId) {
+  const task = taskList.find(t => t.id === taskId);
+  document.getElementById("cv").style.display = "block";
+  document.getElementById("fullTask").style.display = "block"
+  document.getElementById("nm").innerText = "Name: " + task.name;
+  document.getElementById("desc").innerText = "Description:" + task.description;
+  document.getElementById("prio").innerText = "Priority: " + task.priority;
+  const dueAt = new Date(task.dueAt);
+  document.getElementById("dt").innerText = "Due: " + dueAt.toLocaleString();
+}
 
-function setTasks() {
+/** @param {InputEvent} event */
+function handleTaskListItemClick(event) {
+  /** @type {HTMLDivElement} */
+  const taskElement = event.currentTarget;
+  showTaskOptions(Number(taskElement.dataset.id));
+}
+
+
+/** @param {string} label @param {string} value */
+function createTextFieldElement(label, value) {
+  const container = document.createElement("div");
+  const inlineContainer = document.createElement("span");
+  const labelElement = document.createElement("b");
+  labelElement.innerText = label;
+  inlineContainer.append(labelElement, `: ${value}`);
+  container.append(inlineContainer);
+  return container;
+}
+
+/** @param {Task} task */
+function createTaskListItemElement(task) {
+  const taskElement = document.createElement("div");
+  taskElement.classList.add("task-list__item");
+  taskElement.dataset.id = task.id;
+  const nameElement = createTextFieldElement("Name", task.name);
+  const priorityElement = createTextFieldElement("Priority", task.priority);
+  const dueAt = new Date(task.dueAt);
+  const dueAtElement = createTextFieldElement("Due", dueAt.toLocaleString());
+  taskElement.append(nameElement, priorityElement, dueAtElement);
+  taskElement.addEventListener("click", handleTaskListItemClick);
+  return taskElement;
+}
+
+/** @param {Task[]} tasks */
+function setTasks(tasks) {
   if ((document.getElementById('taskDisplayList')) != null) {
     document.getElementById('taskDisplayList').innerHTML = '';
-    for (let i = 0; i < tasks.length; i++) {
-      const task = document.createElement('div');
-      task.setAttribute("class", "storage-box list-item")
-      task.style.whiteSpace = "pre-line";
-      task.textContent = tasks[i].name;
-      task.textContent += "\n";
-      task.textContent += tasks[i].dueAt.slice(0, 10);
-      document.getElementById('taskDisplayList').appendChild(task);
+    for (const task of tasks) {
+      const taskElement = createTaskListItemElement(task);
+      document.getElementById('taskDisplayList').appendChild(taskElement);
     }
-    const listItems = document.querySelectorAll(".list-item")
-
-    listItems.forEach(listItem => {
-      listItem.addEventListener('click', (event) => {
-        document.getElementById("cv").style.display = "block";
-        document.getElementById("fullTask").style.display = "block"
-        //console.log(listItem.textContent.slice(0,listItem.textContent.length-10));
-        const t = tasks.find(t => t.name === listItem.textContent.slice(0, listItem.textContent.length - 11));
-        document.getElementById("nm").textContent = "Name: " + t.name;
-        document.getElementById("desc").textContent = t.description;
-        document.getElementById("prio").textContent = "Priority: " + t.priority;
-        document.getElementById("dt").textContent = "due on: " + t.dueAt.slice(0, 10) + " " + t.dueAt.slice(11, 16);
-      });
-    });
   }
-
 }
-setTasks();
-
-
-
 
 /*
 calendarDates.addEventListener('click', (e) => {
@@ -178,45 +256,39 @@ function displayTask(drop) {
 
 }*/
 
-
-function dueDateSort() {
-  function compare(a, b) {
-    const dateA = a.dueAt;
-    const dateB = b.dueAt;
-    let comparison = 0;
-    if (dateA > dateB) {
-      comparison = -1;
-    } else if (dateA < dateB) {
-      comparison = 1;
-    }
-    return comparison;
+let sortBy = "priority";
+let sortDesc = false;
+function sortTaskList(by) {
+  if (by === sortBy) {
+    sortDesc = !sortDesc;
   }
-  tasks.sort(compare);
-  tasks.reverse();
-  setTasks();
-  console.log(tasks)
-
-}
-function prioritySort() {
-  function compare(a, b) {
-    const prioA = a.priority;
-    const prioB = b.priority;
-    let comparison = 0;
-    if (prioA > prioB) {
-      comparison = 1;
-    } else if (prioA < prioB) {
-      comparison = -1;
-    }
-    return comparison;
+  sortBy = by;
+  switch (by) {
+    case "priority":
+      prioritySort(sortDesc);
+    case "dueDate":
+      dueDateSort(sortDesc);
   }
-  tasks.sort(compare);
-  tasks.reverse();
-  setTasks();
-  console.log(tasks)
 }
-//const res = await fetch('/api/tasks', { method: 'POST', headers, body })
-//setTasks();
 
+function dueDateSort(desc = false) {
+  const mult = desc ? -1 : 1;
+  function compare(a, b) {
+    const dateA = new Date(a.dueAt);
+    const dateB = new Date(b.dueAt);
+    return mult * (dateA.getTime() - dateB.getTime());
+  }
+  taskList.sort(compare);
+  setTasks(taskList);
+}
+function prioritySort(desc = false) {
+  const mult = desc ? -1 : 1;
+  function compare(a, b) {
+    return mult * (a.priority - b.priority);
+  }
+  taskList.sort(compare);
+  setTasks(taskList);
+}
 
 const calendarDates = document.querySelector('.calendar-dates');
 const monthYear = document.getElementById('month-year');
@@ -260,7 +332,7 @@ function renderCalendar(month, year) {
 
     let found = 1;
 
-    found = tasks.find(({ dueAt }) => dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d);
+    found = taskList.find(({ dueAt }) => dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d);
     //console.log(tasks[0].dueAt.toString().slice(0,10));
     //console.log(year+"-"+m+"-"+d);
     //console.log(found);
@@ -274,15 +346,15 @@ function renderCalendar(month, year) {
       document.getElementById("taskDisplayCaa").style.display = "block"
       if ((document.getElementById('taskDisplayCal')) != null) {
         document.getElementById('taskDisplayCal').innerHTML = '';
-        for (let i = 0; i < tasks.length; i++) {
-          if (tasks[i].dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d) { 
-          const task = document.createElement('div');
-          task.setAttribute("class", "storage-box list-item")
-          task.style.whiteSpace = "pre-line";
-          task.textContent = tasks[i].name;
-          task.textContent += "\n";
-          task.textContent += tasks[i].dueAt.slice(0, 10);
-          document.getElementById('taskDisplayCal').appendChild(task);
+        for (let i = 0; i < taskList.length; i++) {
+          if (taskList[i].dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d) {
+            const task = document.createElement('div');
+            task.setAttribute("class", "storage-box list-item")
+            task.style.whiteSpace = "pre-line";
+            task.textContent = taskList[i].name;
+            task.textContent += "\n";
+            task.textContent += taskList[i].dueAt.slice(0, 10);
+            document.getElementById('taskDisplayCal').appendChild(task);
           }
         }
       }
@@ -292,7 +364,7 @@ function renderCalendar(month, year) {
         listItem.addEventListener('click', (event) => {
           document.getElementById("cv").style.display = "block";
           document.getElementById("fullTask").style.display = "block"
-          const t = tasks.find(t => t.name === listItem.textContent.slice(0, listItem.textContent.length - 11));
+          const t = taskList.find(t => t.name === listItem.textContent.slice(0, listItem.textContent.length - 11));
           document.getElementById("nm").textContent = "Name: " + t.name;
           document.getElementById("desc").textContent = t.description;
           document.getElementById("prio").textContent = "Priority: " + t.priority;
