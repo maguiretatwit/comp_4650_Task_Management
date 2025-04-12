@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "body-parser": "^1.20.3",
+    "compression": "^1.8.0",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
     "mysql2": "^3.14.0",
@@ -8,15 +9,17 @@
     "sequelize": "^6.37.6"
   },
   "scripts": {
-    "prestart": "tsc",
+    "prestart": "tsc && node build/scripts/minify",
     "start": "node --env-file-if-exists=.env build/app"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
+    "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.13",
     "@types/nodemailer": "^6.4.17",
+    "esbuild": "0.25.2",
     "typescript": "^5.8.2"
   }
 }
