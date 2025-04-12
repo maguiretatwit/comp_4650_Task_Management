@@ -56,8 +56,8 @@ async function createTask(options) {
   const priority = options.priority;
 
   const dueAt = options.dueAt;
-  if (name && dueAt) {
-    const payload = { name, dueAt };
+  if (name && dueAt && description && priority) {
+    const payload = { name, description, priority, dueAt };
     const body = JSON.stringify(payload);
     const headers = { 'content-type': 'application/json' };
     const res = await fetch('/api/tasks', { method: 'POST', headers, body });
