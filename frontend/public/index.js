@@ -26,7 +26,7 @@ async function deleteTask() {
   const headers = { 'content-type': 'application/json' };
   await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
   closeOpenTask();
-  setTasks();
+  start();
 }
 function openTask() {
   document.getElementById("task-form").style.display = "block";
@@ -62,13 +62,16 @@ async function createTask(options) {
     const headers = { 'content-type': 'application/json' };
     const res = await fetch('/api/tasks', { method: 'POST', headers, body });
     if (res.ok) {
+      start();
       return true;
+
     } else {
       return false;
     }
   } else {
     return false;
   }
+
 }
 
 async function saveTaskForm() {
@@ -139,7 +142,7 @@ calendarDates.addEventListener('click', (e) => {
   }
 });*/
 
-
+/*
 function displayTask(drop) {
   const t = getTasks().find(({ name }) => name === drop.textContent);
 
@@ -167,7 +170,7 @@ function displayTask(drop) {
   drop.appendChild(db);
 
 
-}
+}*/
 
 
 function dueDateSort() {
@@ -239,28 +242,63 @@ function renderCalendar(month, year) {
   for (let i = 1; i <= daysInMonth; i++) {
     const day = document.createElement('div');
     day.textContent = i;
-    let d=i;
-    if(d/10<1){
-      d="0"+d;
+    let d = i;
+    if (d / 10 < 1) {
+      d = "0" + d;
     }
-    let m=month+1;
-    if(m/10<1){
-      m="0"+m;
+    let m = month + 1;
+    if (m / 10 < 1) {
+      m = "0" + m;
     }
     cd = new Date(year, month, i);
 
     let found = 1;
 
-    found = tasks.find(({ dueAt }) => dueAt.toString().slice(0,10) === year+"-"+m+"-"+d);
+    found = tasks.find(({ dueAt }) => dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d);
     //console.log(tasks[0].dueAt.toString().slice(0,10));
     //console.log(year+"-"+m+"-"+d);
-    console.log(found);
+    //console.log(found);
     if (found != undefined) {
-      console.log("test");
-      day.style.backgroundColor="#c67171";
+      //console.log("test");
+      day.style.backgroundColor = "#c67171";
     }
     calendarDates.appendChild(day);
+    day.addEventListener('click', (event) => {
+      document.getElementById("cv").style.display = "block";
+      document.getElementById("taskDisplayCaa").style.display = "block"
+      if ((document.getElementById('taskDisplayCal')) != null) {
+        document.getElementById('taskDisplayCal').innerHTML = '';
+        for (let i = 0; i < tasks.length; i++) {
+          if (tasks[i].dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d) { 
+          const task = document.createElement('div');
+          task.setAttribute("class", "storage-box list-item")
+          task.style.whiteSpace = "pre-line";
+          task.textContent = tasks[i].name;
+          task.textContent += "\n";
+          task.textContent += tasks[i].dueAt.slice(0, 10);
+          document.getElementById('taskDisplayCal').appendChild(task);
+          }
+        }
+      }
+      const listItems = document.querySelectorAll(".list-item")
+
+      listItems.forEach(listItem => {
+        listItem.addEventListener('click', (event) => {
+          document.getElementById("cv").style.display = "block";
+          document.getElementById("fullTask").style.display = "block"
+          const t = tasks.find(t => t.name === listItem.textContent.slice(0, listItem.textContent.length - 11));
+          document.getElementById("nm").textContent = "Name: " + t.name;
+          document.getElementById("desc").textContent = t.description;
+          document.getElementById("prio").textContent = "Priority: " + t.priority;
+          document.getElementById("dt").textContent = "due on: " + t.dueAt.slice(0, 10) + " " + t.dueAt.slice(11, 16);
+        });
+      });
+    });
+
   }
+
+
+
 }
 async function calStart() {
   await getAllTasks();
