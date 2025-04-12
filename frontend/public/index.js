@@ -223,7 +223,6 @@ async function setTaskFormFields(task) {
   const dueAt = new Date(task.dueAt);
   document.getElementById("task-due-date").value = `${dueAt.getFullYear()}-${(dueAt.getMonth() + 1).toString().padStart(2, "0")}-${dueAt.getDate().toString().padStart(2, "0")}`;
   document.getElementById("task-due-time").value = `${dueAt.getHours().toString().padStart(2, "0")}:${dueAt.getMinutes().toString().padStart(2, "0")}`;
-  openTaskForm();
 }
 
 function handleEditTask() {
@@ -231,6 +230,7 @@ function handleEditTask() {
   const taskId = taskElement.dataset.id;
   const task = taskList.find(task => task.id.toString() === taskId);
   setTaskFormFields(task);
+  closeOpenTask();
   openTaskForm("update");
 }
 
