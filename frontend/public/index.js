@@ -46,12 +46,16 @@ function closeTask() {
 }
 function closeTaskList() {
   document.getElementById("cv").style.display = "none";
-  document.getElementById("taskDisplayCal").style.display = "none";
+  document.getElementById("taskBoxCal").style.display = "none";
 
 }
 
 function closeOpenTask() {
   document.getElementById("cv").style.display = "none";
+  document.getElementById("fullTask").style.display = "none";
+
+}
+function closeOpenTaskCal() {
   document.getElementById("fullTask").style.display = "none";
 
 }
@@ -124,7 +128,6 @@ function setTasks() {
   }
 
 }
-setTasks();
 
 
 
@@ -271,7 +274,7 @@ function renderCalendar(month, year) {
     calendarDates.appendChild(day);
     day.addEventListener('click', (event) => {
       document.getElementById("cv").style.display = "block";
-      document.getElementById("taskDisplayCaa").style.display = "block"
+      document.getElementById("taskBoxCal").style.display = "block"
       if ((document.getElementById('taskDisplayCal')) != null) {
         document.getElementById('taskDisplayCal').innerHTML = '';
         for (let i = 0; i < tasks.length; i++) {
