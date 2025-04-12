@@ -38,7 +38,7 @@
                 <div id="dt">Date:</div>
                 <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
                 <button class="button button_inverse" onclick="handleDeleteTask()">Delete</button>
-                <button class="button button_inverse" onclick="editTask()">Edit</button>
+                <button class="button button_inverse" onclick="handleEditTask()">Edit</button>
                 <button class="button button_inverse" onclick="deleteTask()">Complete</button>
             </div>
             <!-- New Task Form -->
@@ -54,7 +54,7 @@
                 <div class="form-element">
                     <label class="form-element__label" for="task-description">Description</label>
                     <div class="form-element__control">
-                        <textarea name="description" placeholder="Description" class="textarea"></textarea>
+                        <textarea id="task-description" name="description" placeholder="Description" class="textarea"></textarea>
                     </div>
                 </div>
                 <!-- Priority -->
@@ -101,7 +101,7 @@
                 <div class="form-element m-top_small">
                     <div class="form-element__control">
                         <button type="button" class="button" onclick="closeTaskForm()">Close</button>
-                        <button type="submit" class="button button_inverse float_right">Submit</button>
+                        <button id="task-submit" type="submit" class="button button_inverse float_right">Submit</button>
                     </div>
                 </div>
             </form>
@@ -113,7 +113,7 @@
             <div class="storage-box fb2">
                 <div class="foot">
                     <div class="ft"> Add Task</div>
-                    <button name="New Task" class="button button_inverse fb" id="open_task" onclick="openTaskForm('create')">+</button>
+                    <button name="New Task" class="button button_inverse fb" id="open_task" onclick="handleCreateTask()">+</button>
                     <div class="ft">Sort By</div>
                     <button class="button button_inverse fb" onclick="sortTaskList('dueDate')">Due-Date</button>
                     <button class="button button_inverse fb" onclick="sortTaskList('priority')">Priority</button>

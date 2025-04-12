@@ -199,42 +199,48 @@ async function handleDeleteTask() {
 
 /** @param {TaskFormAction} action */
 function openTaskForm(action) {
+  const submitButton = document.getElementById("task-submit");
+  switch (action) {
+    case "create":
+      submitButton.innerText = "Submit";
+      break;
+    case "update":
+      submitButton.innerText = "Save";
+      break;
+  }
   const taskForm = document.getElementById("task-form");
   taskForm.dataset.action = action;
   taskForm.classList.remove("hide");
   document.getElementById("cover").classList.remove("hide");
   refreshTasks();
 }
-async function handleEditTask() {
-  openTask();
-  const name = document.getElementById("nm");
-  const t = taskList.find(t => t.name === name.textContent.slice(6, name.textContent.length));
-  const id = t.id  
-  document.getElementById("task-name").value=t.name;
-  document.getElementById("task-description").value= t.description
-  document.getElementById("task-priority").value=t.priority;
-  const dueAt=new Date(t.dueAt);
-  document.getElementById("task-due-date").value= `${dueAt.getFullYear()}-${(dueAt.getMonth()+1).toString().padStart(2,"0")}-${dueAt.getDate().toString().padStart(2,"0")}`;
-  document.getElementById("task-due-time").value=`${dueAt.getHours().toString().padStart(2,"0")}:${dueAt.getMinutes().toString().padStart(2,"0")}`;
-  document.getElementById("editButton").style.display="block"
-  document.getElementById("submitButton").style.display="none"
-  
 
+/** @param {Task} task */
+async function setTaskFormFields(task) {
+  document.getElementById("task-name").value = task.name;
+  document.getElementById("task-description").value = task.description
+  document.getElementById("task-priority").value = task.priority;
+  const dueAt = new Date(task.dueAt);
+  document.getElementById("task-due-date").value = `${dueAt.getFullYear()}-${(dueAt.getMonth() + 1).toString().padStart(2, "0")}-${dueAt.getDate().toString().padStart(2, "0")}`;
+  document.getElementById("task-due-time").value = `${dueAt.getHours().toString().padStart(2, "0")}:${dueAt.getMinutes().toString().padStart(2, "0")}`;
+  openTaskForm();
 }
 
+function handleEditTask() {
+  const taskElement = document.getElementById("fullTask");
+  const taskId = taskElement.dataset.id;
+  const task = taskList.find(task => task.id.toString() === taskId);
+  setTaskFormFields(task);
+  openTaskForm("update");
+}
 
-
-function openTask() {
-  document.getElementById("task-form").style.display = "block";
-  document.getElementById("open_task").style.display = "none";
-  document.getElementById("close_task").style.display = "block";
-  document.getElementById("cv").style.display = "block";
-  document.getElementById("editButton").style.display="none"
-  document.getElementById("task-name").value="";
-  document.getElementById("task-description").value=""
-  document.getElementById("task-priority").value="1";
-  document.getElementById("task-due-date").value= "";
-  document.getElementById("task-due-time").value= "";
+function handleCreateTask() {
+  document.getElementById("task-name").value = "";
+  document.getElementById("task-description").value = ""
+  document.getElementById("task-priority").value = "1";
+  document.getElementById("task-due-date").value = "";
+  document.getElementById("task-due-time").value = "";
+  openTaskForm("create");
 }
 
 function closeTaskForm() {
