@@ -217,6 +217,7 @@ function openTaskForm(action) {
 
 /** @param {Task} task */
 async function setTaskFormFields(task) {
+  document.getElementById("task-form").dataset.taskId = task.id;
   document.getElementById("task-name").value = task.name;
   document.getElementById("task-description").value = task.description
   document.getElementById("task-priority").value = task.priority;
