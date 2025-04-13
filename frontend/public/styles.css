@@ -453,18 +453,19 @@ fieldset {
 
 .calendar-weekdays div,
 .calendar-dates div {
-    text-align: center;
     padding: 10px;
     height: 100%
 }
 
 .calendar-weekdays div {
+    text-align: center;
     font-weight: bold;
 }
 
 .calendar-dates div {
     border: 1px solid #000000;
     cursor: pointer;
+    text-align: left;
 }
 
 .calendar-dates div:hover {
