@@ -33,8 +33,9 @@
                 </div>
             </div>
             <div class="form-element">
-                <a class="text-body_small text-link" onclick="handleForgotPassword()">Forgot your
-                    password?</a>
+                <button type="button" class="button_reset text-body_small text-link"
+                    onclick="handleForgotPassword()">Forgot your
+                    password?</button>
             </div>
         </form>
         <form id="reset-form" class="form" onsubmit="handleGetResetLink(event)" hidden>
@@ -48,8 +49,8 @@
             </div>
             <div class="form-element m-top_small">
                 <div class="form-element__control">
-                    <button class="button" type="button" onclick="handleBack()">Back</button>
-                    <button class="button button_inverse float_right" type="submit">Reset Password</button>
+                    <button type="button" class="button" onclick="handleBack()">Back</button>
+                    <button type="submit" class="button button_inverse float_right">Reset Password</button>
                 </div>
             </div>
         </form>
@@ -100,11 +101,19 @@
                 showError(form);
             }
         }
-        const loginForm = document.getElementById("login-form");
-        const resetForm = document.getElementById("reset-form");
         function handleForgotPassword() {
+            /** @type {HTMLFormElement} */
+            const loginForm = document.getElementById("login-form");
+            /** @type {HTMLFormElement} */
+            const resetForm = document.getElementById("reset-form");
             loginForm.hidden = true;
+            for (const element of loginForm.elements) {
+                element.hidden = true;
+            }
             resetForm.hidden = false;
+            for (const element of resetForm.elements) {
+                element.hidden = false;
+            }
         }
         const infoContainer = document.createElement("div");
         infoContainer.classList.add("text-body_small");
@@ -140,8 +149,18 @@
             submitButton.disabled = false;
         }
         function handleBack() {
+            /** @type {HTMLFormElement} */
+            const loginForm = document.getElementById("login-form");
+            /** @type {HTMLFormElement} */
+            const resetForm = document.getElementById("reset-form");
             resetForm.hidden = true;
+            for (const element of resetForm.elements) {
+                element.hidden = true;
+            }
             loginForm.hidden = false;
+            for (const element of loginForm.elements) {
+                element.hidden = false;
+            }
             infoElement.remove();
         }
     </script>

@@ -235,6 +235,11 @@ fieldset {
     cursor: default;
 }
 
+.button_reset {
+    background: none;
+    border: none;
+}
+
 .task-list__item {
     display: flex;
     flex-direction: column;
