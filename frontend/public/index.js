@@ -512,7 +512,6 @@ function renderCalendar(month, year) {
         if (m / 10 < 1) {
             m = "0" + m;
         }
-        cd = new Date(year, month, i);
 
         let found = 1;
 
