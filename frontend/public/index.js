@@ -11,23 +11,18 @@ class RequestError extends Error {
   status;
   /** @readonly @type {string} */
   statusText;
-  /** @readonly @type {string|null} */
-  message;
   /** @readonly @type {ErrorType|null} */
   type;
   /** @readonly @type {Record<string,string>|null} */
   fields;
   /** @param {Response} res @param {{type:ErrorType;message?:string;fields?:Record<string,string>;}} [body] */
   constructor(res, body) {
-    super();
+    super(body?.message);
     this.status = res.status;
     this.statusText = res.statusText;
-    this.message = this.type = this.fields = null;
+    this.type = this.fields = null;
     if (body) {
       this.type = body.type;
-      if (body.message) {
-        this.message = body.message;
-      }
       if (body.fields) {
         this.fields = body.fields;
       }
@@ -52,6 +47,7 @@ async function request(endpoint, method, payload) {
   if (res.ok) {
     return res;
   } else {
+    /** @type {[Response,Record<String,any>?]} */
     const args = [res];
     if (res.status === 400) {
       args.push(await res.json());
@@ -139,7 +135,7 @@ function showError(form, error) {
         }
       }
     } else {
-      showErrorMessage(form, error.message);
+      showErrorMessage(form, error.message || undefined);
     }
   } else {
     showErrorMessage(form);

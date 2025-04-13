@@ -90,7 +90,7 @@ async function forgotPassword(req: Request<any, any, { email: string }>, res: Re
                     to: email,
                     subject: 'Reset Your Password',
                     /* hardcoded to https://localhost:3000 */
-                    html: `Click <a href="https://localhost:3000/reset-password?token=${token}">here</a> to reset your password.<br>This link will expire in 15 minutes.`
+                    html: `Click <a href="https://localhost:3000/reset-password?token=${encodeURIComponent(token)}">here</a> to reset your password.<br>This link will expire in 15 minutes.`
                 };
                 try {
                     /* send mail */
@@ -156,7 +156,7 @@ async function resetPassword(req: Request<any, any, { token: string; password: s
     }
 }
 
-async function resetPasswordForm(req: Request<any, any, any, { token: string }>, res: Response, next: NextFunction) {
+async function resetPasswordForm(req: Request<any, any, any, { token: string }>, res: Response) {
     const detail = tokens.from(req);
     if (detail) {
         /* send 200 OK */
