@@ -47,12 +47,12 @@ fieldset {
     background: 0 / contain no-repeat url("./assets/images/logo.svg");
 }
 
-.list-item{
+.list-item {
     width: 24%;
     border-radius: .25rem;
-    margin:5px;
+    margin: 5px;
     text-align: center;
-    
+
 }
 
 .global-header__navigation {
@@ -236,6 +236,8 @@ fieldset {
 }
 
 .task-list__item {
+    display: flex;
+    flex-direction: column;
     border: 1px solid black;
     padding: .5rem;
     border-radius: .25rem;
@@ -249,8 +251,36 @@ fieldset {
     transform: scale(1.01);
 }
 
+.list-item__title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+    margin-bottom: .5em;
+}
+
+.list-item__fields {
+    flex-grow: 1;
+    align-content: end;
+}
+
 .justify-content_center {
     justify-content: center;
+}
+
+.task-due_past {
+    color: #d22c2c;
+}
+
+.task-due_sooner {
+    color: #f57b1b;
+}
+
+.task-due_medium {
+    color: #2eac3f;
+}
+
+.task-due_later {
+    color: #000;
 }
 
 .text-body_small {
@@ -347,7 +377,7 @@ fieldset {
     border-radius: .25rem;
 }
 
-#taskBoxCal{
+#taskBoxCal {
     height: 40%;
 }
 
@@ -440,7 +470,7 @@ fieldset {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    
+
 }
 
 .hide {

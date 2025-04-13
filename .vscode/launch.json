@@ -11,9 +11,11 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeArgs": ["--env-file-if-exists=.env"],
+            "runtimeArgs": [
+                "--env-file-if-exists=.env"
+            ],
             "program": "${workspaceFolder}\\build\\app",
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            "preLaunchTask": "build",
             "outFiles": [
                 "${workspaceFolder}/build/**/*.js"
             ]
