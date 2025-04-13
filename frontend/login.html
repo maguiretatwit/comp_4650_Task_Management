@@ -59,10 +59,9 @@
         function setCustomValidity(element, message) {
             function clearValidity(event) {
                 element.setCustomValidity("");
-                element.removeEventListener("input", clearValidity);
             }
             element.setCustomValidity(message);
-            element.addEventListener("input", clearValidity);
+            element.addEventListener("input", clearValidity, { once: true });
         }
         const errorContainer = document.createElement("div");
         errorContainer.classList.add("form__error");

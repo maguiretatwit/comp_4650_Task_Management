@@ -160,7 +160,7 @@ async function resetPasswordForm(req: Request<any, any, any, { token: string }>,
     const detail = tokens.from(req);
     if (detail) {
         /* send 200 OK */
-        res.status(200).sendFile('resetPassword.html', { root: './frontend' });
+        res.status(200).sendFile('resetPassword.min.html', { root: './frontend' });
     } else {
         /* send 401 Unauthorized */
         res.status(401).send();

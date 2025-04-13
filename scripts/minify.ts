@@ -1,5 +1,6 @@
-import { build } from "esbuild";
-import { readdirSync, lstatSync } from "fs";
+import esbuild from "esbuild";
+import { minify } from "html-minifier";
+import { readdirSync, lstatSync, readFileSync, writeFileSync } from "fs";
 
 async function buildFile(path: string) {
     const slashIndex = path.lastIndexOf('/');
@@ -8,29 +9,47 @@ async function buildFile(path: string) {
     const dotIndex = file.lastIndexOf('.');
     const name = file.slice(0, dotIndex);
     const extension = file.slice(dotIndex + 1);
-    if (['js', 'css'].includes(extension) && !name.endsWith('.min')) {
-        await build({
-            entryPoints: [path],
-            outfile: `${directory}/${name}.min.${extension}`,
-            minify: true,
-            sourcemap: true,
-            bundle: false,
-            loader: {
-                '.js': 'js',
-                '.css': 'css'
-            },
-        });
+    if (!name.endsWith('.min')) {
+        const outfile = `${directory}/${name}.min.${extension}`;
+        if (['js', 'css'].includes(extension)) {
+            await esbuild.build({
+                entryPoints: [path],
+                outfile,
+                minify: true,
+                sourcemap: true,
+                bundle: false,
+                loader: {
+                    '.js': 'js',
+                    '.css': 'css'
+                },
+            });
+        } else if (extension === 'html') {
+            const html = readFileSync(path).toString();
+            // --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true
+            const minified = minify(html, {
+                collapseWhitespace: true,
+                removeComments: true,
+                removeOptionalTags: true,
+                removeRedundantAttributes: true,
+                removeScriptTypeAttributes: true,
+                removeTagWhitespace: true,
+                useShortDoctype: true,
+                minifyCSS: true,
+                minifyJS: true
+            });
+            writeFileSync(outfile, minified);
+        }
     }
 }
 
 async function buildDirectory(path: string) {
     const dir = readdirSync(path);
     for (const file of dir) {
-        await minify(`${path}/${file}`);
+        await build(`${path}/${file}`);
     }
 }
 
-async function minify(path: string) {
+async function build(path: string) {
     const stat = lstatSync(path);
     if (stat.isDirectory()) {
         await buildDirectory(path);
@@ -39,4 +58,4 @@ async function minify(path: string) {
     }
 }
 
-minify("./frontend/public");
+build("./frontend");

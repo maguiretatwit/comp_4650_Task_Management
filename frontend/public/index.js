@@ -1,4 +1,4 @@
-/** @typedef {"UNKNOWN"|"CONFLICT"|"MISSING_PROPERTIES"|"VALIDATION_ERROR"} ErrorType @typedef {{id:number;name:string;description:string|null;priority:number;isComplete:boolean;dueAt:string;userId:number;createdAt:string;updatedAt:string}} Task @typedef {{name:string;description?:string;priority?:number;isComplete?:boolean;dueAt?:string}} CreateTaskOptions @typedef {Partial<CreateTaskOptions>} UpdateTaskOptions @typedef {"create"|"update"} TaskFormAction */
+/** @typedef {"UNKNOWN"|"CONFLICT"|"MISSING_PROPERTIES"|"VALIDATION_ERROR"} ErrorType @typedef {{type:ErrorType;message?:string;fields?:Record<string,string>}} ErrorBody @typedef {{id:number;name:string;description:string|null;priority:number;isComplete:boolean;dueAt:string;userId:number;createdAt:string;updatedAt:string}} Task @typedef {{name:string;description?:string;priority?:number;isComplete?:boolean;dueAt?:string}} CreateTaskOptions @typedef {Partial<CreateTaskOptions>} UpdateTaskOptions @typedef {"create"|"update"} TaskFormAction */
 
 /*
  * --------------
@@ -15,7 +15,7 @@ class RequestError extends Error {
     type;
     /** @readonly @type {Record<string,string>|null} */
     fields;
-    /** @param {Response} res @param {{type:ErrorType;message?:string;fields?:Record<string,string>;}} [body] */
+    /** @param {Response} res @param {ErrorBody} [body] */
     constructor(res, body) {
         super(body?.message);
         this.status = res.status;
@@ -47,7 +47,7 @@ async function request(endpoint, method, payload) {
     if (res.ok) {
         return res;
     } else {
-        /** @type {[Response,Record<String,any>?]} */
+        /** @type {ConstructorParameters<typeof RequestError>} */
         const args = [res];
         if (res.status === 400) {
             args.push(await res.json());
@@ -104,10 +104,9 @@ async function deleteTask(taskId) {
 function setCustomValidity(element, message) {
     function clearValidity() {
         element.setCustomValidity("");
-        element.removeEventListener("input", clearValidity);
     }
     element.setCustomValidity(message);
-    element.addEventListener("input", clearValidity);
+    element.addEventListener("input", clearValidity, { once: true });
 }
 
 const errorContainer = document.createElement("div");
@@ -121,7 +120,11 @@ function showErrorMessage(form, ...messages) {
     } else {
         errorElement.innerHTML = messages.join("<br>");
     }
-    form.lastChild.after(errorContainer);
+    if (form.lastChild) {
+        form.lastChild.after(errorContainer);
+    } else {
+        form.append(errorContainer);
+    }
 }
 
 /** @param {HTMLFormElement} form @param {RequestError} error */
@@ -135,7 +138,12 @@ function showError(form, error) {
                 }
             }
         } else {
-            showErrorMessage(form, error.message || undefined);
+            /** @type {Parameters<typeof showErrorMessage>} */
+            const args = [form];
+            if (error.message) {
+                args.push(error.message);
+            }
+            showErrorMessage(...args);
         }
     } else {
         showErrorMessage(form);
@@ -150,11 +158,11 @@ async function handleSubmitTask(event) {
     /** @type {[HTMLInputElement,HTMLInputElement,HTMLSelectElement,HTMLFieldSetElement,HTMLInputElement,HTMLInputElement]} */
     const [nameInput, descriptionInput, priorityInput, _dueAtElement, dueDateInput, dueTimeInput] = form.elements;
     const name = nameInput.value;
-    const description = descriptionInput.value || undefined;
-    const priority = priorityInput.value;
+    const description = descriptionInput.value;
+    const priority = Number(priorityInput.value);
     const dueDate = dueDateInput.value;
     const dueTime = dueTimeInput.value;
-    const dueAt = new Date(`${dueDate.replaceAll("-", "/")} ${dueTime}`);
+    const dueAt = new Date(`${dueDate.replaceAll("-", "/")} ${dueTime}`).toISOString();
     const options = { name, description, priority, dueAt };
     try {
         /** @type {{action:TaskFormAction;taskId:string}} */
@@ -262,12 +270,6 @@ function closeOpenTaskCal() {
     document.getElementById("fullTask").classList.add("hide");
 
 }
-
-/* 
- * -----------
- * |  TASKS  |
- * -----------
- */
 
 /** @param {string} taskId */
 function showTaskOptions(taskId) {
@@ -547,23 +549,24 @@ async function calStart() {
     await refreshTasks();
     renderCalendar(currentMonth, currentYear);
 }
-calStart();
-prevMonthBtn.addEventListener('click', () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    }
-    renderCalendar(currentMonth, currentYear);
-});
+if (location.pathname === "/calendar") {
+    calStart();
+    prevMonthBtn.addEventListener('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(currentMonth, currentYear);
+    });
 
-nextMonthBtn.addEventListener('click', () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-    }
-    renderCalendar(currentMonth, currentYear);
-});
-
+    nextMonthBtn.addEventListener('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(currentMonth, currentYear);
+    });
+}
 

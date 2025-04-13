@@ -17,9 +17,11 @@
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.1",
+    "@types/html-minifier": "^4.0.5",
     "@types/node": "^22.13.13",
     "@types/nodemailer": "^6.4.17",
     "esbuild": "0.25.2",
+    "html-minifier": "^4.0.0",
     "typescript": "^5.8.2"
   }
 }

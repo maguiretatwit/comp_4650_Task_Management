@@ -30,7 +30,7 @@ app.use(express.static('frontend/public'));
 app.get('/', (req, res) => {
     const session = security.sessions.from(req);
     if (session) {
-        res.sendFile('home.html', { root });
+        res.sendFile('home.min.html', { root });
     } else {
         res.status(302).location('login').send();
     }
@@ -38,16 +38,16 @@ app.get('/', (req, res) => {
 app.get('/calendar', (req, res) => {
     const session = security.sessions.from(req);
     if (session) {
-        res.sendFile('calendar.html', { root });
+        res.sendFile('calendar.min.html', { root });
     } else {
         res.status(302).location('login').send();
     }
 });
 app.get('/login', (_, res) => {
-    res.sendFile('login.html', { root });
+    res.sendFile('login.min.html', { root });
 });
 app.get('/register', (_, res) => {
-    res.sendFile('register.html', { root });
+    res.sendFile('register.min.html', { root });
 });
 /* login/logout endpoints */
 app.post('/api/login', hasProperties({ allOf: ['username', 'password'] }));
