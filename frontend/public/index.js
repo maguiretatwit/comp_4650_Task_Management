@@ -448,10 +448,11 @@ function renderCalendar(month, year) {
     const firstDay = new Date(year, month, 1).getDay();
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
+    let total = 0;
     for (let i = 0; i < firstDay; i++) {
         const blank = document.createElement('div');
         calendarDates.appendChild(blank);
+        total++;
     }
 
     for (let i = 1; i <= daysInMonth; i++) {
@@ -470,7 +471,6 @@ function renderCalendar(month, year) {
 
         found = taskList.find(({ dueAt }) => dueAt.toString().slice(0, 10) === year + "-" + m + "-" + d);
         if (found != undefined) {
-            //console.log("test");
             day.style.backgroundColor = "#c67171";
         }
         calendarDates.appendChild(day);
@@ -494,11 +494,15 @@ function renderCalendar(month, year) {
                 }
             }
         });
-
+        total++;
     }
 
-
-
+    while (total < 42) {
+        const element = document.createElement("div");
+        element.innerHTML = "&nbsp;";
+        calendarDates.append(element);
+        total++;
+    }
 }
 async function calStart() {
     await refreshTasks();
