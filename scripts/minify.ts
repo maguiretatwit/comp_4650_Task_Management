@@ -25,7 +25,6 @@ async function buildFile(path: string) {
             });
         } else if (extension === 'html') {
             const html = readFileSync(path).toString();
-            // --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js true
             const minified = minify(html, {
                 collapseWhitespace: true,
                 removeComments: true,

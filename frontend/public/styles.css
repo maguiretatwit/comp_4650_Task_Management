@@ -465,9 +465,22 @@ fieldset {
 }
 
 .calendar-dates div {
-    border: 1px solid #000000;
+    border: 1px solid #000;
     cursor: pointer;
     text-align: left;
+}
+
+.calendar-dates div:nth-child(7n+2),
+.calendar-dates div:nth-child(7n+3),
+.calendar-dates div:nth-child(7n+4),
+.calendar-dates div:nth-child(7n+5),
+.calendar-dates div:nth-child(7n+6),
+.calendar-dates div:nth-child(7n+7) {
+    border-left: none;
+}
+
+.calendar-dates div:nth-child(n+8) {
+    border-top: none;
 }
 
 .calendar-dates div:hover {
