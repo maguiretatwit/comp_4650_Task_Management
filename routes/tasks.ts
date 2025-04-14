@@ -94,7 +94,7 @@ async function deleteTask(req: Request<{ taskId: string }>, res: security.Respon
         const task = await Task.findOne({ where: { id: taskId, userId: user.id } });
         if (task) {
             /* delete task */
-            task.destroy();
+            await task.destroy();
             /* send 204 No Content */
             res.status(204).send();
         } else {
