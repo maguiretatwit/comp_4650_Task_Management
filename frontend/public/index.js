@@ -477,6 +477,7 @@ function renderCalendar(month, year) {
         day.addEventListener("click", () => {
             document.getElementById("cover").classList.remove("hide");
             document.getElementById("taskBoxCal").classList.remove("hide")
+            document.getElementById("date-dialog-title").innerText = new Date(year, m - 1, d).toDateString();
             const taskDisplay = document.getElementById("taskDisplayCal");
             if (taskDisplay) {
                 taskDisplay.innerHTML = '';
