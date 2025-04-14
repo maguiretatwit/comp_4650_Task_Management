@@ -37,11 +37,13 @@
                 <button class="button button_inverse" id="closeTaskList" onclick="closeTaskList()">Close</button>
             </div>
             <div id="fullTask" class="taskBox overlay hide">
-                <div id="nm">Name:</div>
-                <div id="desc">Description:</div>
-                <div id="prio">Priority:</div>
-                <div id="dt">Date:</div>
-                <button class="button button_inverse" onclick="closeOpenTaskCal()">Close</button>
+                <div><b>Name: </b><span id="nm"></span></div>
+                <div><b>Description: </b><span id="desc"></span></div>
+                <div><b>Prority: </b><span id="prio"></span></div>
+                <div><b>Due Date: </b><span id="dt"></span></div>
+                <div class="m-top_small">
+                    <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
+                </div>
             </div>
             <div class="row-container">
                 <div class="storage-box calender" id="calender">

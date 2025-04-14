@@ -383,7 +383,9 @@ fieldset {
 }
 
 #taskBoxCal {
-    height: 40%;
+    min-width: 18rem;
+    width: min-content;
+    height: min-content;
 }
 
 

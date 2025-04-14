@@ -32,14 +32,16 @@
             <div class="cover hide" id="cover">
             </div>
             <div id="fullTask" class="taskBox overlay hide">
-                <div id="nm">Name:</div>
-                <div id="desc">Description:</div>
-                <div id="prio">Priority:</div>
-                <div id="dt">Date:</div>
-                <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
-                <button class="button button_inverse" onclick="handleDeleteTask()">Delete</button>
-                <button class="button button_inverse" onclick="handleEditTask()">Edit</button>
-                <button class="button button_inverse" onclick="deleteTask()">Complete</button>
+                <div><b>Name: </b><span id="nm"></span></div>
+                <div><b>Description: </b><span id="desc"></span></div>
+                <div><b>Prority: </b><span id="prio"></span></div>
+                <div><b>Due Date: </b><span id="dt"></span></div>
+                <div class="m-top_small">
+                    <button class="button button_inverse" onclick="closeOpenTask()">Close</button>
+                    <button class="button button_inverse" onclick="handleDeleteTask()">Delete</button>
+                    <button class="button button_inverse" onclick="handleEditTask()">Edit</button>
+                    <button class="button button_inverse" onclick="handleDeleteTask()">Complete</button>
+                </div>
             </div>
             <!-- New Task Form -->
             <form autocomplete="off" class="form tform overlay hide" id="task-form" onsubmit="handleSubmitTask(event)">
@@ -54,7 +56,8 @@
                 <div class="form-element">
                     <label class="form-element__label" for="task-description">Description</label>
                     <div class="form-element__control">
-                        <textarea id="task-description" name="description" placeholder="Description" class="textarea"></textarea>
+                        <textarea id="task-description" name="description" placeholder="Description"
+                            class="textarea"></textarea>
                     </div>
                 </div>
                 <!-- Priority -->
@@ -84,14 +87,16 @@
                             <div class="form-element size_1-of-2">
                                 <label class="form-element__label" for="task-due-date">Date</label>
                                 <div class="form-element__control">
-                                    <input id="task-due-date" name="dueDate" required class="input" type="date" placeholder="Date">
+                                    <input id="task-due-date" name="dueDate" required class="input" type="date"
+                                        placeholder="Date">
                                 </div>
                             </div>
                             <!-- Time -->
                             <div class="form-element size_1-of-2">
                                 <label class="form-element__label" for="task-due-time">Time</label>
                                 <div class="form-element__control">
-                                    <input id="task-due-time" name="dueTime" required class="input" type="time" placeholder="Time">
+                                    <input id="task-due-time" name="dueTime" required class="input" type="time"
+                                        placeholder="Time">
                                 </div>
                             </div>
                         </div>
@@ -113,7 +118,8 @@
             <div class="storage-box fb2">
                 <div class="foot">
                     <div class="ft"> Add Task</div>
-                    <button name="New Task" class="button button_inverse fb" id="open_task" onclick="handleCreateTask()">+</button>
+                    <button name="New Task" class="button button_inverse fb" id="open_task"
+                        onclick="handleCreateTask()">+</button>
                     <div class="ft">Sort By</div>
                     <button class="button button_inverse fb" onclick="sortTaskList('dueDate')">Due-Date</button>
                     <button class="button button_inverse fb" onclick="sortTaskList('priority')">Priority</button>

@@ -278,9 +278,9 @@ function showTaskOptions(taskId) {
     const taskElement = document.getElementById("fullTask");
     taskElement.dataset.id = taskId;
     taskElement.classList.remove("hide");
-    document.getElementById("nm").innerText = "Name: " + task.name;
-    document.getElementById("desc").innerText = "Description:" + task.description;
-    document.getElementById("prio").innerText = "Priority: " + task.priority;
+    document.getElementById("nm").innerText = task.name;
+    document.getElementById("desc").innerText = task.description;
+    document.getElementById("prio").innerText = task.priority;
     const dueAt = new Date(task.dueAt);
     document.getElementById("dt").innerText = "Due: " + dueAt.toLocaleString();
 }
@@ -391,55 +391,6 @@ function setTasks(tasks) {
     }
 }
 
-/*
-calendarDates.addEventListener('click', (e) => {
-  if (e.target.textContent !== '') {
-    document.getElementById("taskDisplayCalender").classList.remove("hide")
-    cList = document.createElement('ul');
-    document.getElementById("taskDisplayCalender").appendChild(cList);
-    cList.replaceChildren();
-    const tasks = getTasks();
-    for (let i = 0; i < tasks.length; i++) {
-      const task = document.createElement('li');
-      task.textContent = tasks[i].name;
-      task.setAttribute("id", "listItem")
-      task.setAttribute("class", "listItemClass")
-
-      document.getElementById('task_list').appendChild(task);
-    }
-  }
-});*/
-
-/*
-function displayTask(drop) {
-  const t = getTasks().find(({ name }) => name === drop.textContent);
-
-  title = document.createElement('h1');
-  title.textContent = t.name;
-  drop.appendChild(title);
-  title.setAttribute("");
-  desc = document.createElement('div');
-  desc.textContent = t.description;
-  drop.appendChild(desc);
-  desc.setAttribute("");
-  p = document.createElement('div');
-  p.textContent = t.name;
-  drop.appendChild(p);
-  p.setAttribute("");
-  da = document.createElement('div');
-  da.textContent = t.name;
-  drop.appendChild(da);
-  da.setAttribute("");
-  cb = document.createElement('button')
-  drop.appendChild(cb);
-  eb = document.createElement('button')
-  drop.appendChild(eb);
-  db = document.createElement('button')
-  drop.appendChild(db);
-
-
-}*/
-
 let sortBy = "priority";
 let sortDesc = false;
 function sortTaskList(by) {
@@ -450,8 +401,10 @@ function sortTaskList(by) {
     switch (by) {
         case "priority":
             prioritySort(sortDesc);
+            break;
         case "dueDate":
             dueDateSort(sortDesc);
+            break;
     }
 }
 
@@ -535,6 +488,9 @@ function renderCalendar(month, year) {
                         const taskElement = createTaskListItemElement(task);
                         taskDisplay.append(taskElement);
                     }
+                }
+                if (taskDisplay.children.length === 0) {
+                    taskDisplay.append("No Tasks Due");
                 }
             }
         });
