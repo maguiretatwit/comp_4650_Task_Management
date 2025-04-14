@@ -65,6 +65,11 @@ async function logout() {
     await request("/api/logout", "POST");
 }
 
+async function handleLogout() {
+    await logout();
+    location.replace("/login");
+}
+
 /** @returns {Promise<Task[]>} */
 async function getTasks() {
     const res = await request("/api/tasks");
