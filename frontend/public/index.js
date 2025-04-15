@@ -65,11 +65,6 @@ async function logout() {
     await request("/api/logout", "POST");
 }
 
-async function handleLogout() {
-    await logout();
-    location.replace("/login");
-}
-
 /** @returns {Promise<Task[]>} */
 async function getTasks() {
     const res = await request("/api/tasks");
@@ -187,6 +182,11 @@ async function handleSubmitTask(event) {
     }
 }
 
+async function handleLogout() {
+    await logout();
+    location.replace("/login");
+}
+
 /** @type {Task[]}  */
 let taskList = [];
 async function refreshTasks() {
@@ -194,11 +194,6 @@ async function refreshTasks() {
     setTasks(taskList);
 }
 refreshTasks();
-
-async function handleLogout() {
-    await logout();
-    location.replace('/login');
-}
 
 async function handleDeleteTask() {
     const taskElement = document.getElementById("fullTask");
